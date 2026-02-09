@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PANDU-GI: Cikarang 1</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --pln-blue: #00549b;
+            --pln-yellow: #ffec00;
+        }
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .navbar {
+            background-color: var(--pln-blue) !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .search-container {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: #f4f7f6;
+            padding: 15px 0;
+        }
+        .card-annunciator {
+            border-left: 5px solid var(--pln-blue);
+            transition: transform 0.2s;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        .card-annunciator:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .highlight {
+            background-color: var(--pln-yellow);
+            font-weight: bold;
+        }
+        .badge-number {
+            background-color: var(--pln-blue);
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 0.8rem;
+        }
+        .tindakan-box {
+            background-color: #e8f4fd;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px dashed var(--pln-blue);
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-dark">
+    <div class="container">
+        <span class="navbar-brand mb-0 h1">PANDU-GI <small style="font-size: 0.6em;">Cikarang 1</small></span>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="search-container">
+        <input type="text" id="searchInput" class="form-control form-control-lg shadow-sm" placeholder="Cari Indikasi atau Penyebab..." onkeyup="searchFunction()">
+        <div id="resultCount" class="form-text mt-2 text-muted">Menampilkan semua data</div>
+    </div>
+
+    <div id="annunciatorList">
+        </div>
+</div>
+
+<div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color: var(--pln-blue);">
+                <h5 class="modal-title" id="modalTitle">Detail Indikasi</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h6><strong>Maksud:</strong></h6>
+                <p id="modalMaksud"></p>
+                <hr>
+                <h6><strong>Penyebab:</strong></h6>
+                <p id="modalPenyebab"></p>
+                <hr>
+                <div class="tindakan-box">
+                    <h6><strong>Tindakan / Penanggulangan:</strong></h6>
+                    <p id="modalTindakan" class="mb-0 fw-bold text-primary"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Data dari CSV Cikarang 1 yang diunggah
+    const dataAnnunciator = [
+        {no: 1, nama: "C/S/G DC SUPPLIES FAILURE", maksud: "Terjadi trip di MCB DC di Panel ACDB Switch L/R", penyebab: "Tegangan supply panel Rele dan Kontrol hilang", tindakan: "Periksa MCB di Panel ACDB, jika Trip naikan kembali"},
+        {no: 2, nama: "CB ON LOCAL OPERATED", maksud: "Posisi pada Box PMT Posisi Lokal", penyebab: "PMT tidak Bisa di operasikan secara remote baik dari Panel Maupun dari UP2B", tindakan: "Periksa L/R pada Box PMT, Posisikan Remote Kembali"},
+        {no: 3, nama: "T1/T2 Failure", maksud: "Terjadi Trip MCB Supplay Rangkaian Trip1/2 Turun", penyebab: "Suplay tenganan untuk Rangkaian Trip terganggu", tindakan: "Periksa MCB Suplay Rangkaian Trip, jika Trip naikan kembali"},
+        {no: 4, nama: "Spring Charge Failure", maksud: "System pengisian pegas tidak siap sehingga PMT tidak bisa trip", penyebab: "Supply tegangan untuk pengisian motor pegas PMT Trip/terganggu", tindakan: "Periksa, catat, reset indikasi, dan laporkan"},
+        {no: 5, nama: "F21 Received DTT", maksud: "PMT Trip karena Rele Distance menerima perintah dari GI Lawan", penyebab: "Ada gangguan pada system 150 kV", tindakan: "Periksa, catat, dan laporkan"},
+        {no: 6, nama: "F21 Send DTT", maksud: "PMT Trip karena perintah Rele Distance, Rele Mengirim Trip ke GI Lawan", penyebab: "Ada gangguan pada system 150 kV", tindakan: "Periksa, catat, dan laporkan"},
+        {no: 7, nama: "MK Local Position", maksud: "Posisi Switch L/R pada MK Posisi Lokal", penyebab: "Peralatan Tidak Bisa di operasikan secara remote baik dari Panel Maupun dari UP2B", tindakan: "Priksa L/R pada MK Posisikan Remote Kembali"},
+        {no: 8, nama: "Unit Trip Lockout", maksud: "Master Trip mengerjakan lockout", penyebab: "Ada gangguan yang menyebabkan trip dan perlu investigasi lanjut", tindakan: "Periksa, catat, reset dan laporkan sesuai prosedur"},
+        {no: 9, nama: "Isollator DS/DSL and CB Motor Supplay Failure", maksud: "MCB Supplay Motor PMS Trip di MK/Box PMS", penyebab: "Supplay Tegangan Untuk Motor Hilang, Motor tidak bisa dioperasikan", tindakan: "Priksa MCB pada MK/Box PMS, Posisikan ON Kembali"},
+        {no: 10, nama: "CB Pole Discrepancy", maksud: "Keserempakan PMT 150 kV saat close tidak bersamaan", penyebab: "Keterlambatan salah satu fasa pada PMT 150kV saat close", tindakan: "Periksa, catat, dan laporkan"},
+        {no: 11, nama: "F5051 PH +N Operated", maksud: "PMT 150 kV Trip karena Rele OCR 150 kV bekerja", penyebab: "Ada gangguan hubung singkat antara fasa-fasa dan fasa ke tanah", tindakan: "Periksa, catat, reset indikasi, dan laporkan"},
+        {no: 12, nama: "CB SF6 Alarm ST 1", maksud: "Terjadi penurunan Tekanan gas sampai level Alarm", penyebab: "Ada kebocoran pada PMT 150 kV", tindakan: "Periksa, catat, reset indikasi, dan laporkan"},
+        {no: 13, nama: "CB Gas Trip Lockout", maksud: "PMT 150 kV Trip karena tekanan SF6 di PMT turun", penyebab: "Ada kebocoran pada PMT 150 kV", tindakan: "Periksa, catat, reset indikasi, dan laporkan"},
+        {no: 14, nama: "CB Open", maksud: "Indikasi PMT 150 kV dalam Kondisi Open", penyebab: "PMT 150kV Open", tindakan: "Periksa, catat, reset indikasi, dan laporkan"},
+        {no: 15, nama: "OLS Cikarang 1 Trip", maksud: "Relay OLS Bekerja pengurangan beban", penyebab: "PMT 150kV Trafo 3 Trip Akibat OLS Bekerja", tindakan: "Periksa, catat, reset indikasi, dan laporkan"},
+        {no: 16, nama: "Dead VT Line Detection Failure", maksud: "Tegangan Pada VT Bermasalah", penyebab: "Tegangan yang dibaca oleh VT terganggu", tindakan: "Periksa, catat, reset indikasi, dan laporkan"},
+        {no: 17, nama: "Main Protection Failure F21", maksud: "Rele Distance Bermasalah", penyebab: "Rele distance terganggu sehingga tidak dapat bekerja", tindakan: "Periksa, catat, reset indikasi, dan laporkan"},
+        {no: 18, nama: "Backup Prot Failure F5051PH+N", maksud: "Rele Backup (OCR) Bermasalah", penyebab: "Rele OCR terganggu sehingga tidak dapat bekerja", tindakan: "Periksa, catat, reset indikasi, dan laporkan"},
+        {no: 19, nama: "BMQ Failure", maksud: "BCU Bermasalah", penyebab: "BCU terganggu sehingga tidak dapat bekerja", tindakan: "Periksa, catat, reset indikasi, dan laporkan"},
+        {no: 20, nama: "TCS 1/2 Failure", maksud: "Rangkaian Trip pada PMT Bermasalah", penyebab: "PMT 150kV Tidak Bisa Close", tindakan: "Periksa Rangkaian, catat, dan laporkan"},
+        {no: 21, nama: "F21 Operated", maksud: "PMT Trip karena Rele Distance bekerja", penyebab: "Ada gangguan pada system 150 kV", tindakan: "Periksa, catat, dan laporkan"},
+        {no: 22, nama: "Lockout Trip 2 Operated", maksud: "Master Trip mengerjakan lockout", penyebab: "Ada gangguan yang menyebabkan trip dan perlu investigasi lanjut", tindakan: "Periksa, catat, reset dan laporkan sesuai prosedur"},
+        {no: 23, nama: "Busbar Protection Operated", maksud: "Rele pada Busbar Bekerja", penyebab: "PMT Trip akibat dari Rele busbar, ada gangguan pada busbar", tindakan: "Periksa, catat, reset indikasi, dan laporkan"}
+    ];
+
+    function renderList(filteredData) {
+        const container = document.getElementById('annunciatorList');
+        const count = document.getElementById('resultCount');
+        container.innerHTML = '';
+        
+        filteredData.forEach(item => {
+            const card = `
+                <div class="card card-annunciator shadow-sm" onclick="showDetail(${item.no})">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title text-primary mb-1">${item.nama}</h5>
+                            <span class="badge-number">${item.no}</span>
+                        </div>
+                        <p class="card-text small text-muted mb-1"><strong>Penyebab:</strong> ${item.penyebab}</p>
+                        <p class="card-text small text-truncate"><strong>Maksud:</strong> ${item.maksud}</p>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+        count.innerText = `Menampilkan ${filteredData.length} data`;
+    }
+
+    function searchFunction() {
+        const input = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = dataAnnunciator.filter(item => 
+            item.nama.toLowerCase().includes(input) || 
+            item.penyebab.toLowerCase().includes(input) ||
+            item.maksud.toLowerCase().includes(input)
+        );
+        renderList(filtered);
+    }
+
+    function showDetail(no) {
+        const item = dataAnnunciator.find(d => d.no === no);
+        document.getElementById('modalTitle').innerText = item.nama;
+        document.getElementById('modalMaksud').innerText = item.maksud;
+        document.getElementById('modalPenyebab').innerText = item.penyebab;
+        document.getElementById('modalTindakan').innerText = item.tindakan;
+        
+        var myModal = new bootstrap.Modal(document.getElementById('detailModal'));
+        myModal.show();
+    }
+
+    // Load data pertama kali
+    renderList(dataAnnunciator);
+</script>
+
+</body>
+</html>
