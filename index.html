@@ -80,18 +80,7 @@
 
         .bg-announ { background: #eff6ff; color: #3b82f6; }
         .bg-sop { background: #f0fdf4; color: #22c55e; }
-
-        .search-box {
-            position: sticky; top: 10px; z-index: 100;
-            background: white; padding: 10px; border-radius: 50px;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            margin-bottom: 20px; display: flex; align-items: center;
-        }
-
-        #searchInput {
-            border: none; width: 100%; outline: none;
-            padding: 10px; font-size: 16px; font-family: inherit;
-        }
+        .bg-contact { background: #fff1f2; color: #e11d48; }
 
         .btn-back {
             background: #1e293b; color: white; border: none; padding: 10px 20px;
@@ -120,12 +109,6 @@
 
         .edit-tools { position: absolute; top: 15px; right: 15px; display: flex; gap: 5px; }
 
-        .unit-label { font-size: 11px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        .alarm-name { font-weight: 800; color: var(--danger); margin-bottom: 8px; font-size: 17px; line-height: 1.3; padding-right: 65px;}
-        .section-label { font-size: 10px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-top: 10px; display: block; }
-        .section-content { font-size: 14px; color: #334155; line-height: 1.5; margin-bottom: 5px; }
-        .action-box { background: #fffbeb; padding: 12px; border-radius: 12px; border: 1px solid #fef3c7; margin-top: 12px; }
-
         .btn-action {
             padding: 8px 12px; border-radius: 8px; border: none; 
             cursor: pointer; font-weight: 600; font-size: 11px;
@@ -135,6 +118,8 @@
         .t1 { border-left-color: #3b82f6; } .t3 { border-left-color: #10b981; } 
         .t4 { border-left-color: #8b5cf6; } .kopel { border-left-color: #f59e0b; }
         .cik1, .cik2 { border-left-color: #ef4444; }
+
+        .contact-card { display: flex; align-items: center; justify-content: space-between; padding: 15px; background: white; border-radius: 15px; margin-bottom: 10px; border: 1px solid #f1f5f9; }
     </style>
 </head>
 <body>
@@ -145,27 +130,30 @@
         <div class="header">
             <div style="font-size: 50px;">🛡️</div>
             <h1>PANDU-GI</h1>
-            <p>Database & Panduan Operasional</p>
+            <p>Sistem Informasi Operasional</p>
         </div>
         <div class="menu-grid">
             <div class="menu-card" onclick="openPage('announPage')">
                 <div class="icon-box bg-announ">🔍</div>
-                <div><h3>Annunciator</h3><p>Database alarm & CRUD fitur</p></div>
+                <div><h3>Annunciator</h3><p>Database alarm lengkap</p></div>
             </div>
             <div class="menu-card" onclick="openPage('sopPage')">
                 <div class="icon-box bg-sop">📜</div>
                 <div><h3>Panduan SOP</h3><p>Upload & Buka PDF</p></div>
+            </div>
+            <div class="menu-card" onclick="openPage('contactPage')">
+                <div class="icon-box bg-contact">📞</div>
+                <div><h3>Kontak Darurat</h3><p>Daftar telepon penting</p></div>
             </div>
         </div>
     </div>
 
     <div id="announPage" class="page">
         <button class="btn-back" onclick="openPage('homePage')">← Menu Utama</button>
-        
         <button onclick="toggleForm('announForm')" class="btn-action" style="background: var(--primary); color: white; width: 100%; margin-bottom: 15px; padding: 12px;">+ Tambah Alarm Baru</button>
-
+        
         <div id="announForm" class="form-container" style="display: none;">
-            <h3 id="formTitle">Tambah Data Alarm</h3>
+            <h3 id="formTitle">Edit/Tambah Alarm</h3>
             <input type="hidden" id="editIndex">
             <input type="text" id="inUnit" class="input-field" placeholder="Unit (Contoh: TRAFO 1)">
             <input type="text" id="inClass" class="input-field" placeholder="Class CSS (t1, t3, t4, kopel, cik1, cik2)">
@@ -173,17 +161,29 @@
             <textarea id="inMaksud" class="input-field" placeholder="Maksud Indikasi"></textarea>
             <textarea id="inPenyebab" class="input-field" placeholder="Penyebab Kemungkinan"></textarea>
             <textarea id="inTindakan" class="input-field" placeholder="Tindakan Penanggulangan"></textarea>
-            <div style="display: flex; gap: 10px;">
-                <button onclick="saveAnnunciator()" class="btn-action" style="background: var(--success); color: white; flex: 1;">Simpan</button>
-                <button onclick="toggleForm('announForm')" class="btn-action" style="background: #ccc; flex: 1;">Batal</button>
-            </div>
+            <button onclick="saveAnnunciator()" class="btn-action" style="background: var(--success); color: white; width:100%; margin-top:10px;">Simpan</button>
         </div>
 
-        <div class="search-box">
-            <span style="margin-left: 10px;">🔍</span>
-            <input type="text" id="searchInput" placeholder="Cari alarm...">
+        <div style="background:white; padding:10px; border-radius:50px; display:flex; align-items:center; margin-bottom:20px; box-shadow:0 10px 15px rgba(0,0,0,0.05);">
+            <span style="margin-left:10px;">🔍</span>
+            <input type="text" id="searchInput" placeholder="Cari unit atau nama alarm..." style="border:none; width:100%; outline:none; padding:10px;">
         </div>
         <div id="results"></div>
+    </div>
+
+    <div id="contactPage" class="page">
+        <button class="btn-back" onclick="openPage('homePage')">← Menu Utama</button>
+        <h2>📞 Kontak Darurat</h2>
+        <button onclick="toggleForm('contactForm')" class="btn-action" style="background: var(--danger); color: white; width: 100%; margin-bottom: 15px; padding: 12px;">+ Tambah Kontak</button>
+        
+        <div id="contactForm" class="form-container" style="display: none;">
+            <input type="hidden" id="editContactIndex">
+            <input type="text" id="conName" class="input-field" placeholder="Nama/Instansi">
+            <input type="text" id="conPhone" class="input-field" placeholder="Nomor Telepon">
+            <input type="text" id="conDesc" class="input-field" placeholder="Keterangan">
+            <button onclick="saveContact()" class="btn-action" style="background: var(--success); color: white; width:100%;">Simpan Kontak</button>
+        </div>
+        <div id="contactList"></div>
     </div>
 
     <div id="sopPage" class="page">
@@ -192,7 +192,7 @@
         <div class="form-container">
             <input type="text" id="sopTitle" class="input-field" placeholder="Judul SOP">
             <input type="file" id="sopFile" accept="application/pdf" style="margin: 10px 0;">
-            <button onclick="uploadSOP()" class="btn-action" style="background: var(--success); color: white; width: 100%;">Upload PDF</button>
+            <button onclick="uploadSOP()" class="btn-action" style="background: var(--success); color: white; width: 100%;">Simpan ke Memory</button>
         </div>
         <div id="sopListContainer"></div>
     </div>
@@ -200,9 +200,9 @@
 </div>
 
 <script>
-// --- DATABASE LENGKAP SESUAI ASLINYA ---
-const initialData = [
-    // --- TRAFO 1 ---
+// --- DATABASE ASLI LENGKAP 100% ---
+const fullOriginalData = [
+    // TRAFO 1
     {s:"TRAFO 1", c:"t1", a:"CB Q0 – On Local", m:"Posisi PMT pada posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", c:"t1", a:"DS Q1/Q2 On Local", m:"Posisi PMS Rel Posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", c:"t1", a:"Common Trafo Alarm", m:"Ada Rele Lock Out mekanik yang kerja di Panel Regulator Trafo", p:"Ada gangguan Internal trafo (Winding HV / LV alarm , Buchols alarm , Oil level ) yang terdeteksi Rele mekanik", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
@@ -218,7 +218,7 @@ const initialData = [
     {s:"TRAFO 1", c:"t1", a:"Lockout Operated", m:"Master Trip mengerjakan lockout", p:"Ada gangguan yang menyebabkan trip dan perlu investigasi lanjut", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", c:"t1", a:"BVT MCB Trip", m:"MCB VT busbar trip di MK", p:"Ada sort sirkit di beban VT ataupun ada beban yang melebih kapasitas MCB VT", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
 
-    // --- TRAFO 3 ---
+    // TRAFO 3
     {s:"TRAFO 3", c:"t3", a:"F87 TRIP", m:"PMT 150/20 kV Trip karena Rele Differential Trafo Bekerja", p:"Ada gangguan hubung singkat di kumparan Trafo ataupun di daerah pengamanannya (antara CT 150 kV dan 20 kV)", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"TRAFO 3", c:"t3", a:"F87 FAIL", m:"Rele Differential Trafo Bekerja", p:"Ada gangguan hubung singkat di kumparan Trafo ataupun di daerah pengamanannya (antara CT 150 kV dan 20 kV)", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"TRAFO 3", c:"t3", a:"Bus Coupler Close", m:"Indikasi PMT 150 KV Kopel Masuk", p:"PMT 150 KV Kopel Masuk", t:"Periksa, catat"},
@@ -243,7 +243,7 @@ const initialData = [
     {s:"TRAFO 3", c:"t3", a:"CB SF6 ALARM", m:"Ada penurunan tekanan Gas SF6 di PMT sampai level Alarm", p:"Ada kebocoran di system pengisian maupun kerusakan seal di PMT", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"TRAFO 3", c:"t3", a:"CB SF6 LOCKOUT", m:"Ada penurunan tekanan Gas SF6 di PMT sampai level Lockout", p:"Ada kebocoran di system pengisian maupun kerusakan seal di PMT", t:"Periksa, catat, reset indikasi, dan laporkan"},
 
-    // --- TRAFO 4 ---
+    // TRAFO 4
     {s:"TRAFO 4", c:"t4", a:"Diff Relay Operated", m:"PMT 150/20 KV trip karena Rele Differensial Trafo phasa R bekerja", p:"Ada gangguan hubung singkat di kumparan trafo ataupun di daerah pengamanannya ( antara CT 150 KV dan CT 20 KV )", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 4", c:"t4", a:"OCR,GFR,SEF", m:"PMT 150KV Trip karena Relay OCR,GFR,SEF Kerja", p:"Ada gangguan hubung singkat phasa ke tanah sisi 150 KV Trafo", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 4", c:"t4", a:"BUCHHOLTZ TRIP", m:"PMT 150KV Trip karena relay bucholtz kerja", p:"Gangguan internal yang dideteksi oleh Rele mekanik Trafo al.Buchols Trip , Jansen Trip ,Sudden Pressure Trip", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
@@ -255,11 +255,11 @@ const initialData = [
     {s:"TRAFO 4", c:"t4", a:"Buchholtz Alarm", m:"Relay mekanik (bucholtz) bekerja sampai level alarm", p:"Ada gangguan Internal trafo (Winding HV / LV alarm , Buchols alarm , Oil level ) yang terdeteksi Rele mekanik", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 4", c:"t4", a:"Junction OLTC", m:"PMT 150KV Trip karena rele (jansen) mekanik trafo bekerja", p:"Gangguan internal yang dideteksi oleh Rele mekanik Trafo al.Buchols Trip , Jansen Trip ,Sudden Pressure Trip", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 4", c:"t4", a:"Winding TEMP Alarm", m:"Relay mekanik (temperature) bekerja sampai level alarm", p:"Ada gangguan Internal trafo (Winding HV / LV alarm , Buchols alarm , Oil level ) yang terdeteksi Rele mekanik", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 4", c:"t4", a:"SF6 Min/Block Presure", m:"PMT 150 KV block Trip pada saat gas SF6 mencapai level trip", p:"PMT tidak bisa trip karena setting trip di blok", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+    {s:"TRAFO 4", c:"t4", a:"SF6 Min/Block Presure", m:"PMT 150 KV block Trip pada saat gas SF6 mencapai level trip", p:"PMT tidak bisa trip because setting trip di blok", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 4", c:"t4", a:"Fire Protection Operated", m:"Pengaman Kebakaran untuk trafo bekerja", p:"Ada peningkatan panas di internal trafo disertai bekerjanya semua relai pengaman utama trafo", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 4", c:"t4", a:"20 KV TRIP", m:"PMT Incoming 20 KV Trip", p:"Ada gangguan di 20 KV yang menyebbkan PMT Inc. Trip termasuk karena penyulang gagal Trip", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
 
-    // --- KOPEL ---
+    // KOPEL
     {s:"KOPEL", c:"kopel", a:"DC supply failure", m:"Supply 110 V DC untuk panel control dan panel Rele hilang", p:"MCB C 001 untuk supply di panel proteksi dan C 002 untuk supply di panel control trip", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"KOPEL", c:"kopel", a:"OCR Start", m:"Indikasi rele OCR 150 kV yang arus hubung singkatnya malebihi setting", p:"Ada gangguan hubung singkat antara fasa-fasa sisi 150 kV", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"KOPEL", c:"kopel", a:"OCR Trip", m:"PMT 150 kV Trip karena Rele OCR 150 kV bekerja dengan indikasi OCR", p:"Ada gangguan hubung singkat antara fasa-fasa sisi 150 kV", t:"Periksa, catat, reset indikasi, dan laporkan"},
@@ -272,7 +272,7 @@ const initialData = [
     {s:"KOPEL", c:"kopel", a:"SF6 stage 1 (alarm)", m:"Ada penurunan tekanan gas SF6 (5.6 BAR) pada step 1", p:"Ada kebocoran di pemipaan dan motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"KOPEL", c:"kopel", a:"SF6 stage 2 (trip)", m:"PMT 150 kV Trip karena penurunan Tekanan gas SF6 (5.5 BAR) pada step 2", p:"Ada kebocoran di pemipaan dan pengisian motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
 
-    // --- CIKARANG 1 ---
+    // CIKARANG 1
     {s:"CIKARANG 1", c:"cik1", a:"C/S/G DC SUPPLIES FAILURE", m:"Terjadi trip di MCB DC di Panel ACDB Switch L/R", p:"Tegangan supply panel Rele dan Kontrol hilang", t:"Periksa MCB di Panel ACDB, jika Trip naikan kembali"},
     {s:"CIKARANG 1", c:"cik1", a:"CB ON LOCAL OPERATED", m:"Posisi pada Box PMT Posisi Lokal", p:"PMT tidak Bisa di operasikan secara remote baik dari Panel Maupun dari UP2B", t:"Periksa L/R pada Box PMT, Posisikan Remote Kembali"},
     {s:"CIKARANG 1", c:"cik1", a:"T1/T2 Failure", m:"Terjadi Trip MCB Supplay Rangkaian Trip1/2 Turun", p:"Suplay tenganan untuk Rangkaian Trip terganggu", t:"Periksa MCB Suplay Rangkaian Trip, jika Trip naikan kembali"},
@@ -298,7 +298,7 @@ const initialData = [
     {s:"CIKARANG 1", c:"cik1", a:"F50/51N Operated", m:"PMT Trip karena Rele GFR bekerja", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"},
     {s:"CIKARANG 1", c:"cik1", a:"F87L Operated", m:"PMT Trip karena Rele Differential Line bekerja", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"},
 
-    // --- CIKARANG 2 ---
+    // CIKARANG 2
     {s:"CIKARANG 2", c:"cik2", a:"C/S/G DC SUPPLIES FAILURE", m:"Terjadi trip di MCB DC di Panel ACDB", p:"Tegangan supply panel Rele dan Kontrol hilang", t:"Periksa MCB di Panel ACDB, jika Trip naikan kembali"},
     {s:"CIKARANG 2", c:"cik2", a:"CB ON LOCAL OPERATED", m:"Posisi Switch L/R pada Box PMT Posisi Lokal", p:"PMT tidak Bisa di operasikan secara remote baik dari Panel Maupun dari UP2B", t:"Priksa L/R pada Box PMT, Posisikan Remote Kembali"},
     {s:"CIKARANG 2", c:"cik2", a:"T1/T2 Failure", m:"Terjadi Trip MCB Supplay Rangkaian Trip1/2 Turun", p:"Suplay tenganan untuk Rangkaian Trip terganggu", t:"Periksa MCB Suplay Rangkaian Trip, jika Trip naikan kembali"},
@@ -325,39 +325,30 @@ const initialData = [
     {s:"CIKARANG 2", c:"cik2", a:"F87L Operated", m:"PMT Trip karena Rele Differential Line bekerja", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"}
 ];
 
-let annunciatorData = JSON.parse(localStorage.getItem('announData_final')) || initialData;
+let announData = JSON.parse(localStorage.getItem('announ_final_db')) || fullOriginalData;
+let contactData = JSON.parse(localStorage.getItem('contact_final_db')) || [
+    {name: "Piket UP2B", phone: "021-xxxx", desc: "Dispatch Utama"},
+    {name: "Damkar", phone: "113", desc: "Darurat Kebakaran"}
+];
 
-function saveToLocal() { localStorage.setItem('announData_final', JSON.stringify(annunciatorData)); }
-
-// --- NAVIGASI ---
+// --- NAVIGATION ---
 function openPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
+    if(id === 'announPage') renderAnnoun(announData.map((item, index) => ({item, refIndex: index})));
+    if(id === 'contactPage') renderContacts();
     if(id === 'sopPage') renderSOPList();
-    if(id === 'announPage') renderResults(annunciatorData.map((item, index) => ({item, refIndex: index})));
 }
 
 function toggleForm(id) {
     const f = document.getElementById(id);
     f.style.display = f.style.display === 'none' ? 'block' : 'none';
-    if(f.style.display === 'none') resetForm();
 }
 
-function resetForm() {
-    document.getElementById('editIndex').value = '';
-    document.getElementById('inUnit').value = '';
-    document.getElementById('inClass').value = '';
-    document.getElementById('inAlarm').value = '';
-    document.getElementById('inMaksud').value = '';
-    document.getElementById('inPenyebab').value = '';
-    document.getElementById('inTindakan').value = '';
-    document.getElementById('formTitle').innerText = 'Tambah Data Alarm Baru';
-}
-
-// --- CRUD ANNUNCIATOR ---
+// --- ANNUNCIATOR LOGIC ---
 function saveAnnunciator() {
     const idx = document.getElementById('editIndex').value;
-    const newData = {
+    const data = {
         s: document.getElementById('inUnit').value,
         c: document.getElementById('inClass').value,
         a: document.getElementById('inAlarm').value,
@@ -365,128 +356,166 @@ function saveAnnunciator() {
         p: document.getElementById('inPenyebab').value,
         t: document.getElementById('inTindakan').value
     };
-
-    if(idx === "") {
-        annunciatorData.push(newData);
-    } else {
-        annunciatorData[idx] = newData;
-    }
-
-    saveToLocal();
+    if(idx === "") announData.push(data);
+    else announData[idx] = data;
+    localStorage.setItem('announ_final_db', JSON.stringify(announData));
     toggleForm('announForm');
-    renderResults(annunciatorData.map((item, index) => ({item, refIndex: index})));
+    openPage('announPage');
 }
 
-function editAnnoun(index) {
-    const d = annunciatorData[index];
-    document.getElementById('editIndex').value = index;
+function editAnnoun(idx) {
+    const d = announData[idx];
+    document.getElementById('editIndex').value = idx;
     document.getElementById('inUnit').value = d.s;
     document.getElementById('inClass').value = d.c;
     document.getElementById('inAlarm').value = d.a;
     document.getElementById('inMaksud').value = d.m;
     document.getElementById('inPenyebab').value = d.p;
     document.getElementById('inTindakan').value = d.t;
-    document.getElementById('formTitle').innerText = 'Edit Data';
     document.getElementById('announForm').style.display = 'block';
     window.scrollTo(0,0);
 }
 
-function deleteAnnoun(index) {
-    if(confirm("Hapus alarm ini? Tindakan ini permanen.")) {
-        annunciatorData.splice(index, 1);
-        saveToLocal();
-        renderResults(annunciatorData.map((item, index) => ({item, refIndex: index})));
+function deleteAnnoun(idx) {
+    if(confirm("Hapus data alarm?")) {
+        announData.splice(idx, 1);
+        localStorage.setItem('announ_final_db', JSON.stringify(announData));
+        openPage('announPage');
     }
 }
 
-// --- SEARCH ENGINE ---
-document.getElementById('searchInput').addEventListener('input', (e) => {
-    const query = e.target.value;
-    if (query.trim() === '') {
-        renderResults(annunciatorData.map((item, index) => ({item, refIndex: index})));
-        return;
-    }
-    const fuse = new Fuse(annunciatorData, { keys: ['a', 'm', 'p', 's'], threshold: 0.3 });
-    renderResults(fuse.search(query).map(r => ({ item: r.item, refIndex: r.refIndex })));
-});
-
-function renderResults(list) {
-    const container = document.getElementById('results');
-    container.innerHTML = '';
-    list.forEach(res => {
-        const d = res.item;
-        const actualIdx = res.refIndex;
-        const card = document.createElement('div');
-        card.className = `result-card ${d.c}`;
-        card.innerHTML = `
+function renderAnnoun(list) {
+    const res = document.getElementById('results');
+    res.innerHTML = '';
+    list.forEach(r => {
+        const d = r.item;
+        const div = document.createElement('div');
+        div.className = `result-card ${d.c}`;
+        div.innerHTML = `
             <div class="edit-tools">
-                <button onclick="editAnnoun(${actualIdx})" class="btn-action" style="background:var(--warning); color:white;">✎</button>
-                <button onclick="deleteAnnoun(${actualIdx})" class="btn-action" style="background:var(--danger); color:white;">✕</button>
+                <button onclick="editAnnoun(${r.refIndex})" class="btn-action" style="background:var(--warning); color:white;">✎</button>
+                <button onclick="deleteAnnoun(${r.refIndex})" class="btn-action" style="background:var(--danger); color:white;">✕</button>
             </div>
-            <span class="unit-label">⚡ UNIT: ${d.s}</span>
-            <div class="alarm-name">${d.a}</div>
-            <span class="section-label">Maksud Indikasi</span>
-            <div class="section-content">${d.m}</div>
-            <span class="section-label">Penyebab Kemungkinan</span>
-            <div class="section-content">${d.p}</div>
-            <div class="action-box">
-                <span class="section-label" style="color:#b45309">⚠️ Tindakan Penanggulangan</span>
-                <div class="section-content" style="font-weight:700; color:#92400e;">${d.t}</div>
+            <span style="font-size:11px; font-weight:800; color:#64748b; text-transform:uppercase;">UNIT: ${d.s}</span>
+            <h3 style="color:var(--danger); margin:8px 0; font-size:18px;">${d.a}</h3>
+            <p style="font-size:14px; margin-bottom:5px;"><strong>Maksud:</strong> ${d.m}</p>
+            <p style="font-size:14px; margin-bottom:5px;"><strong>Penyebab:</strong> ${d.p}</p>
+            <div style="background:#fffbeb; padding:12px; border-radius:12px; border:1px solid #fef3c7; margin-top:10px;">
+                <strong style="color:#92400e; font-size:14px;">⚠️ Tindakan:</strong>
+                <p style="margin:5px 0 0; color:#92400e; font-size:14px; font-weight:700;">${d.t}</p>
             </div>
         `;
-        container.appendChild(card);
+        res.appendChild(div);
     });
 }
 
-// --- SOP PDF LOGIC ---
+// --- CONTACT LOGIC ---
+function saveContact() {
+    const idx = document.getElementById('editContactIndex').value;
+    const data = {
+        name: document.getElementById('conName').value,
+        phone: document.getElementById('conPhone').value,
+        desc: document.getElementById('conDesc').value
+    };
+    if(idx === "") contactData.push(data);
+    else contactData[idx] = data;
+    localStorage.setItem('contact_final_db', JSON.stringify(contactData));
+    toggleForm('contactForm');
+    renderContacts();
+}
+
+function editContact(idx) {
+    const d = contactData[idx];
+    document.getElementById('editContactIndex').value = idx;
+    document.getElementById('conName').value = d.name;
+    document.getElementById('conPhone').value = d.phone;
+    document.getElementById('conDesc').value = d.desc;
+    document.getElementById('contactForm').style.display = 'block';
+}
+
+function deleteContact(idx) {
+    if(confirm("Hapus kontak?")) {
+        contactData.splice(idx, 1);
+        localStorage.setItem('contact_final_db', JSON.stringify(contactData));
+        renderContacts();
+    }
+}
+
+function renderContacts() {
+    const list = document.getElementById('contactList');
+    list.innerHTML = '';
+    contactData.forEach((c, idx) => {
+        const div = document.createElement('div');
+        div.className = 'contact-card';
+        div.innerHTML = `
+            <div>
+                <h4 style="margin:0; color:var(--primary);">${c.name}</h4>
+                <p style="margin:5px 0; font-weight:700;">📞 ${c.phone}</p>
+                <small style="color:#64748b;">${c.desc}</small>
+            </div>
+            <div>
+                <button onclick="editContact(${idx})" class="btn-action" style="background:var(--warning); color:white;">✎</button>
+                <button onclick="deleteContact(${idx})" class="btn-action" style="background:var(--danger); color:white;">✕</button>
+            </div>
+        `;
+        list.appendChild(div);
+    });
+}
+
+// --- SEARCH ---
+document.getElementById('searchInput').addEventListener('input', (e) => {
+    const q = e.target.value;
+    if(!q) return renderAnnoun(announData.map((item, index) => ({item, refIndex: index})));
+    const fuse = new Fuse(announData, { keys: ['a', 's', 'm', 'p', 't'], threshold: 0.3 });
+    renderAnnoun(fuse.search(q).map(r => ({item: r.item, refIndex: r.refIndex})));
+});
+
+// --- SOP LOGIC ---
 function uploadSOP() {
     const title = document.getElementById('sopTitle').value;
     const file = document.getElementById('sopFile').files[0];
-    if (!title || !file) return alert("Pilih file & judul!");
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const sops = JSON.parse(localStorage.getItem('savedSOPs_final') || '[]');
-        sops.push({ id: Date.now(), title: title, data: e.target.result });
-        localStorage.setItem('savedSOPs_final', JSON.stringify(sops));
-        renderSOPList();
-    };
-    reader.readAsDataURL(file);
+    if (title && file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const sops = JSON.parse(localStorage.getItem('sop_db_final') || '[]');
+            sops.push({title, data: e.target.result});
+            localStorage.setItem('sop_db_final', JSON.stringify(sops));
+            renderSOPList();
+        };
+        reader.readAsDataURL(file);
+    }
 }
 
 function renderSOPList() {
     const container = document.getElementById('sopListContainer');
-    const sops = JSON.parse(localStorage.getItem('savedSOPs_final') || '[]');
-    container.innerHTML = '';
-    sops.forEach(s => {
-        const div = document.createElement('div');
-        div.className = 'menu-card';
-        div.style.marginBottom = '10px';
-        div.innerHTML = `<div style="flex:1"><h4>${s.title}</h4></div>
-            <button onclick="viewPDF('${s.id}')" class="btn-action" style="background:var(--accent); color:white; margin-right:5px;">Buka</button>
-            <button onclick="deleteSOP(${s.id})" class="btn-action" style="background:var(--danger); color:white;">Hapus</button>`;
-        container.appendChild(div);
-    });
+    const sops = JSON.parse(localStorage.getItem('sop_db_final') || '[]');
+    container.innerHTML = sops.map((s, idx) => `
+        <div class="menu-card" style="margin-bottom:10px; justify-content:space-between;">
+            <h4>${s.title}</h4>
+            <div style="display:flex; gap:5px;">
+                <button onclick="viewPDF('${idx}')" class="btn-action" style="background:var(--accent); color:white;">Buka</button>
+                <button onclick="deleteSOP('${idx}')" class="btn-action" style="background:var(--danger); color:white;">✕</button>
+            </div>
+        </div>
+    `).join('');
 }
 
-function viewPDF(id) {
-    const sops = JSON.parse(localStorage.getItem('savedSOPs_final') || '[]');
-    const item = sops.find(x => x.id == id);
-    if (item) {
-        const win = window.open();
-        win.document.write(`<title>${item.title}</title><iframe src="${item.data}" frameborder="0" style="width:100%; height:100vh;"></iframe>`);
-    }
+function viewPDF(idx) {
+    const sops = JSON.parse(localStorage.getItem('sop_db_final') || '[]');
+    const win = window.open();
+    win.document.write(`<title>${sops[idx].title}</title><iframe src="${sops[idx].data}" frameborder="0" style="width:100%; height:100vh;"></iframe>`);
 }
 
-function deleteSOP(id) {
-    if (confirm("Hapus SOP?")) {
-        let sops = JSON.parse(localStorage.getItem('savedSOPs_final') || '[]');
-        sops = sops.filter(x => x.id != id);
-        localStorage.setItem('savedSOPs_final', JSON.stringify(sops));
+function deleteSOP(idx) {
+    if(confirm("Hapus file SOP?")) {
+        let sops = JSON.parse(localStorage.getItem('sop_db_final') || '[]');
+        sops.splice(idx, 1);
+        localStorage.setItem('sop_db_final', JSON.stringify(sops));
         renderSOPList();
     }
 }
 
-window.onload = () => { renderResults(annunciatorData.map((item, index) => ({item, refIndex: index}))); };
+window.onload = () => { renderAnnoun(announData.map((item, index) => ({item, refIndex: index}))); };
 </script>
 </body>
 </html>
