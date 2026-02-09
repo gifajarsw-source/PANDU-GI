@@ -120,6 +120,25 @@
         {bay: "Cikarang 2", no: 21, nama: "F21 Operated", maksud: "PMT Trip karena Rele Distance bekerja", penyebab: "Ada gangguan pada system 150 kV", tindakan: "Periksa, catat, dan laporkan"},
         {bay: "Cikarang 2", no: 22, nama: "Lockout Trip 2 Operated", maksud: "Master Trip mengerjakan lockout", penyebab: "Ada gangguan yang menyebabkan trip dan perlu investigasi lanjut", tindakan: "Periksa, catat, reset dan laporkan sesuai prosedur"},
         {bay: "Cikarang 2", no: 23, nama: "Busbar Protection Operated", maksud: "Rele pada Busbar Bekerja", penyebab: "PMT Trip akibat dari Rele busbar, ada gangguan pada busbar", tindakan: "Periksa, catat, reset indikasi, dan laporkan"}
+
+        // DATA TRAFO 1
+        [
+        {bay:"Trafo3",no:1,nama:"CB Q0 – On Local",maksud:"Posisi PMT pada posisi Local",penyebab:"Switch R/S pada posisi remote atau local",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+        {bay:"Trafo3",no:2,nama:"DS Q1/Q2 On Local",maksud:"Posisi PMS Rel Posisi Local",penyebab:"Switch R/S pada posisi remote atau local",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+        {bay:"Trafo3",no:3,nama:"Common Trafo Alarm",maksud:"Ada Rele Lock Out mekanik yang kerja di Panel Trafo",penyebab:"Ada gangguan Internal trafo (Winding HV / LV atau Core)",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+        {bay:"Trafo3",no:4,nama:"Alarm SF6 Low Level",maksud:"Ada penurunan tekanan Gas SF6 di PMT sampai level alarm",penyebab:"Ada kebocoran di system pengisian maupun kerusakan sealing",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+        {bay:"Trafo3",no:5,nama:"CB lockout SF6 Operated",maksud:"Ada penurunan tekanan Gas SF6 di PMT sampai level lockout",penyebab:"Ada kebocoran di system pengisian maupun kerusakan sealing",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+        {bay:"Trafo3",no:6,nama:"CB Mecanic Spring Discarge",maksud:"Pegas PMT tidak siap untuk operasi",penyebab:"Suplay 110 untuk motor terganggu ,mekanik penggerak bermasalah",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+        {bay:"Trafo3",no:7,nama:"CB Supplay Failure",maksud:"Ada gangguan suplay DC 380 V pada PMT",penyebab:"MCB 3 pole QF1 di MK Trip",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+        {bay:"Trafo3",no:8,nama:"DS Q1/Q2 Supplay Fail",maksud:"Ada gangguan supplay PMS Rel di MK",penyebab:"MCB untuk suplay motor PMS Trip ,ada kerusakan motor PMS",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+        {bay:"Trafo3",no:9,nama:"Common Trafo Trip",maksud:"PMT 150/20 KV Trip karena gangguan internal Trafo",penyebab:"Gangguan internal yang dideteksi oleh Rele mekanik trafo",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+        {bay:"Trafo3",no:10,nama:"MK Supplay Trip",maksud:"Ada gangguan pada suplay 380V ke MK",penyebab:"MCB untuk supplay ke MK di ACDB trip atau ada gangguan jaringan",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+        {bay:"Trafo3",no:11,nama:"TCS 1 Failure",maksud:"PMT tidak siap trip karena rele trip circuit satu gagal",penyebab:"Ada kegagalan rangkaian Triping coil PMT No 1 di MK",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+        {bay:"Trafo3",no:12,nama:"TCS 2 Failure",maksud:"PMT tidak siap trip karena rele trip circuit dua gagal",penyebab:"Ada kegagalan rangkaian Triping coil PMT No 2 di MK",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+        {bay:"Trafo3",no:13,nama:"Lockout Operated",maksud:"Master Trip mengerjakan lockout",penyebab:"Ada gangguan yang menyebabkan trip dan perlu inspeksi lanjut",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+        {bay:"Trafo3",no:14,nama:"BVT MCB Trip",maksud:"MCB VT busbar trip di MK",penyebab:"Ada sort sirkit di beban VT ataupun ada beban berlebih",tindakan:"Periksa ,catat ,reset dan laporkan sesuai prosedur"}
+]
+
     ];
 
     function renderList(filteredData) {
