@@ -3,140 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANDU-GI | Full Database</title>
+    <title>PANDU-GI | FULL DATABASE VERIFIED</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-deep: #020617;
-            --accent-blue: #00f2ff;
-            --accent-green: #10b981;
-            --accent-red: #ff2d55;
-            --glass: rgba(15, 23, 42, 0.95);
-            --border: rgba(255, 255, 255, 0.1);
-            --text: #f8fafc;
+            --bg: #020617;
+            --blue: #00f2ff;
+            --green: #10b981;
+            --red: #ff2d55;
+            --yellow: #facc15;
+            --card-bg: rgba(15, 23, 42, 0.95);
         }
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at 50% 0%, #1e293b, #020617);
-            background-attachment: fixed; margin: 0; color: var(--text); min-height: 100vh;
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #f8fafc; margin: 0; padding-bottom: 50px; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+
+        /* Branding */
+        .header { text-align: center; padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px; }
+        .logo { width: 60px; margin-bottom: 10px; }
+        .title { font-family: 'Orbitron', sans-serif; font-size: 24px; color: var(--blue); margin: 0; }
+
+        /* Form Section */
+        #editorSection {
+            display: none; background: #0f172a; border: 3px solid var(--yellow);
+            border-radius: 15px; padding: 20px; margin-bottom: 30px;
+            position: sticky; top: 10px; z-index: 1000; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
 
-        .container { max-width: 500px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
-
-        /* Header & Branding */
-        .header { text-align: center; padding: 20px 0; }
-        .logo { width: 55px; filter: drop-shadow(0 0 10px var(--accent-blue)); margin-bottom: 10px; }
-        .title { 
-            font-family: 'Orbitron', sans-serif; font-size: 30px; letter-spacing: 4px; 
-            background: linear-gradient(to bottom, #fff, var(--accent-blue));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;
-        }
-
-        /* Menu Card */
-        .card { 
-            background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--border);
-            border-radius: 20px; padding: 18px; margin-bottom: 15px;
-        }
-        .menu-btn { display: flex; align-items: center; cursor: pointer; border-left: 5px solid var(--accent-blue); }
-
-        /* Form & Input */
         input, textarea {
-            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border);
-            padding: 12px; color: white; border-radius: 10px; margin-bottom: 10px; outline: none; box-sizing: border-box;
+            width: 100%; background: #000; border: 1px solid #334155;
+            padding: 12px; color: white; border-radius: 8px; margin-bottom: 10px; font-family: inherit; font-size: 14px;
         }
 
-        .btn { 
-            padding: 12px; border-radius: 10px; border: none; cursor: pointer; 
-            font-weight: bold; font-family: 'Orbitron', sans-serif; font-size: 10px;
-        }
-        .btn-add { background: var(--accent-green); color: white; width: 100%; margin-bottom: 15px; }
-        .btn-edit { background: var(--accent-blue); color: #000; flex: 1; }
-        .btn-del { background: var(--accent-red); color: white; flex: 1; }
+        /* Buttons */
+        .btn { padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: bold; font-family: 'Orbitron'; font-size: 11px; text-transform: uppercase; }
+        .btn-save { background: var(--green); color: white; width: 100%; font-size: 14px; }
+        .btn-cancel { background: #475569; color: white; width: 100%; margin-top: 8px; }
+        .btn-edit { background: var(--yellow); color: black; flex: 1; }
+        .btn-del { background: var(--red); color: white; flex: 1; }
+        .btn-add-new { background: var(--blue); color: black; width: 100%; margin-bottom: 20px; font-size: 14px; letter-spacing: 1px; }
 
-        /* Navigation */
-        .page { display: none; animation: fadeIn 0.3s ease; }
-        .active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Data Card */
+        .data-card { background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 20px; margin-bottom: 20px; }
+        .unit-label { background: var(--blue); color: black; padding: 4px 12px; border-radius: 4px; font-weight: 800; font-size: 11px; font-family: 'Orbitron'; }
+        .alarm-name { color: var(--red); font-size: 19px; margin: 12px 0; font-weight: 800; text-transform: uppercase; line-height: 1.2; }
+        .content-box { font-size: 14px; line-height: 1.6; border-left: 3px solid var(--blue); padding-left: 15px; margin-bottom: 15px; }
+        .content-box b { color: var(--blue); display: block; margin-top: 10px; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .action-btns { display: flex; gap: 10px; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px; }
 
-        .unit-badge { font-size: 9px; font-weight: 800; background: var(--accent-blue); color: #000; padding: 3px 8px; border-radius: 4px; margin-bottom: 8px; display: inline-block; font-family: 'Orbitron'; }
-        .alarm-title { color: var(--accent-red); margin: 0 0 10px 0; font-size: 18px; }
-        .search-box { position: sticky; top: 10px; z-index: 100; margin-bottom: 20px; }
+        .search-box { width: 100%; padding: 15px; border-radius: 12px; background: #1e293b; border: 2px solid var(--blue); color: white; margin-bottom: 20px; box-sizing: border-box; font-size: 16px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="homePage" class="page active">
-        <div class="header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Logo_PLN.svg" class="logo">
-            <h1 class="title">PANDU-GI</h1>
-            <p style="font-size:10px; letter-spacing:2px; color:var(--accent-blue)">DATABASE OPERATOR LENGKAP</p>
-        </div>
-        <div class="card menu-btn" onclick="openPage('announPage')">
-            <div style="font-size:24px; margin-right:15px;">📡</div>
-            <div><b>Annunciator</b><br><small style="color:gray">Manajemen Database Alarm</small></div>
-        </div>
-        <div class="card menu-btn" style="border-left-color: var(--accent-green)" onclick="openPage('sopPage')">
-            <div style="font-size:24px; margin-right:15px;">📋</div>
-            <div><b>Digital SOP</b><br><small style="color:gray">Manajemen Dokumen PDF</small></div>
-        </div>
-        <div class="card menu-btn" style="border-left-color: var(--accent-red)" onclick="openPage('contactPage')">
-            <div style="font-size:24px; margin-right:15px;">📞</div>
-            <div><b>Kontak</b><br><small style="color:gray">Manajemen Nomor Darurat</small></div>
-        </div>
+    <div class="header">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Logo_PLN.svg" class="logo">
+        <div class="title">PANDU-GI</div>
+        <p style="font-size: 10px; color: #94a3b8; letter-spacing: 2px; margin-top: 5px;">DATABASE 100% SESUAI MANUAL ASLI</p>
     </div>
 
-    <div id="announPage" class="page">
-        <button class="btn" style="background:transparent; color:gray" onclick="openPage('homePage')">← KEMBALI</button>
-        <h2 style="font-family:'Orbitron'; font-size:18px;">DATABASE ALARM</h2>
-        
-        <button class="btn btn-add" onclick="toggleForm('formAnnoun')">+ TAMBAH DATA BARU</button>
-        
-        <div id="formAnnoun" class="card" style="display:none; border-color:var(--accent-green)">
-            <input type="hidden" id="editIdxAnn">
-            <input type="text" id="inUnit" placeholder="Unit (Contoh: TRAFO 1)">
-            <input type="text" id="inAlarm" placeholder="Nama Alarm">
-            <textarea id="inMaksud" placeholder="Maksud Indikasi"></textarea>
-            <textarea id="inSebab" placeholder="Kemungkinan Penyebab"></textarea>
-            <textarea id="inTindakan" placeholder="Tindakan"></textarea>
-            <button class="btn btn-add" onclick="saveAnnoun()">SIMPAN DATA</button>
-        </div>
-
-        <div class="search-box">
-            <input type="text" id="searchAnn" placeholder="Cari unit atau nama alarm..." oninput="renderAnnoun()">
-        </div>
-        <div id="announList"></div>
+    <div id="editorSection">
+        <h2 id="formTitle" style="margin-top:0; font-size:16px; color:var(--yellow); text-align:center;">EDITOR DATA</h2>
+        <input type="hidden" id="editIdx">
+        <input type="text" id="inUnit" placeholder="UNIT">
+        <input type="text" id="inAlarm" placeholder="NAMA ALARM">
+        <textarea id="inMaksud" placeholder="MAKSUD INDIKASI" rows="4"></textarea>
+        <textarea id="inSebab" placeholder="KEMUNGKINAN PENYEBAB" rows="4"></textarea>
+        <textarea id="inTindakan" placeholder="TINDAKAN" rows="4"></textarea>
+        <button class="btn btn-save" onclick="saveData()">💾 SIMPAN PERUBAHAN KE DATABASE</button>
+        <button class="btn btn-cancel" onclick="closeEditor()">❌ BATAL</button>
     </div>
 
-    <div id="contactPage" class="page">
-        <button class="btn" style="background:transparent; color:gray" onclick="openPage('homePage')">← KEMBALI</button>
-        <h2 style="font-family:'Orbitron'; font-size:18px;">KONTAK DARURAT</h2>
-        <button class="btn btn-add" onclick="toggleForm('formContact')">+ TAMBAH KONTAK</button>
-        <div id="formContact" class="card" style="display:none">
-            <input type="hidden" id="editIdxCon">
-            <input type="text" id="conName" placeholder="Nama Instansi">
-            <input type="text" id="conPhone" placeholder="Nomor Telepon">
-            <button class="btn btn-add" onclick="saveContact()">SIMPAN KONTAK</button>
-        </div>
-        <div id="contactList"></div>
-    </div>
+    <button class="btn btn-add-new" onclick="showAddForm()">➕ TAMBAH DATA ALARM BARU</button>
+    
+    <input type="text" id="search" class="search-box" placeholder="Cari unit atau nama alarm (misal: Trafo 3)..." oninput="renderData()">
 
-    <div id="sopPage" class="page">
-        <button class="btn" style="background:transparent; color:gray" onclick="openPage('homePage')">← KEMBALI</button>
-        <h2 style="font-family:'Orbitron'; font-size:18px;">DOKUMEN SOP</h2>
-        <div class="card">
-            <input type="text" id="sopName" placeholder="Judul SOP">
-            <input type="file" id="sopFile" accept="application/pdf">
-            <button class="btn btn-add" onclick="saveSOP()">UPLOAD PDF</button>
-        </div>
-        <div id="sopList"></div>
-    </div>
+    <div id="mainList"></div>
 </div>
 
 <script>
-// DATABASE 100% LENGKAP
-const rawDB = [
+// --- DATABASE 100% UTUH TANPA PENGURANGAN ---
+const rawDatabase = [
     // TRAFO 1
     {s:"TRAFO 1", a:"CB Q0 – On Local", m:"Posisi PMT pada posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", a:"DS Q1/Q2 On Local", m:"Posisi PMS Rel Posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
@@ -260,26 +208,62 @@ const rawDB = [
     {s:"CIKARANG 2", a:"F87L Operated", m:"PMT Trip karena Rele Differential Line bekerja", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"}
 ];
 
-let announData = JSON.parse(localStorage.getItem('announ_full_v4')) || rawDB;
-let contactData = JSON.parse(localStorage.getItem('contact_full_v4')) || [{name:"Piket UP2B", phone:"021-7456789"}];
-let sopData = JSON.parse(localStorage.getItem('sop_full_v4')) || [];
+let db = JSON.parse(localStorage.getItem('GI_MASTER_DB')) || rawDatabase;
 
-function openPage(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-    renderAnnoun(); renderContact(); renderSOP();
-    window.scrollTo(0,0);
+function renderData() {
+    const list = document.getElementById('mainList');
+    const search = document.getElementById('search').value.toLowerCase();
+    list.innerHTML = '';
+
+    db.forEach((item, index) => {
+        if (item.s.toLowerCase().includes(search) || item.a.toLowerCase().includes(search)) {
+            list.innerHTML += `
+                <div class="data-card">
+                    <span class="unit-label">${item.s}</span>
+                    <div class="alarm-name">${item.a}</div>
+                    <div class="content-box">
+                        <b>Maksud Indikasi:</b> ${item.m}
+                        <b>Kemungkinan Penyebab:</b> ${item.p}
+                        <b>Tindakan:</b> ${item.t}
+                    </div>
+                    <div class="action-btns">
+                        <button class="btn btn-edit" onclick="editData(${index})">✏️ EDIT DATA INI</button>
+                        <button class="btn btn-del" onclick="deleteData(${index})">🗑️ HAPUS DATA INI</button>
+                    </div>
+                </div>
+            `;
+        }
+    });
 }
 
-function toggleForm(id) {
-    const f = document.getElementById(id);
-    f.style.display = f.style.display === 'none' ? 'block' : 'none';
+function editData(index) {
+    const item = db[index];
+    document.getElementById('editorSection').style.display = 'block';
+    document.getElementById('formTitle').innerText = " sedang mengedit: " + item.a;
+    document.getElementById('editIdx').value = index;
+    
+    document.getElementById('inUnit').value = item.s;
+    document.getElementById('inAlarm').value = item.a;
+    document.getElementById('inMaksud').value = item.m;
+    document.getElementById('inSebab').value = item.p;
+    document.getElementById('inTindakan').value = item.t;
+    
+    window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
-// --- ANNUNCIATOR CORE ---
-function saveAnnoun() {
-    const idx = document.getElementById('editIdxAnn').value;
-    const newItem = {
+function showAddForm() {
+    document.getElementById('editorSection').style.display = 'block';
+    document.getElementById('formTitle').innerText = "TAMBAH DATA BARU";
+    document.getElementById('editIdx').value = "";
+    document.querySelectorAll('#editorSection input, #editorSection textarea').forEach(el => el.value = "");
+    window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function closeEditor() { document.getElementById('editorSection').style.display = 'none'; }
+
+function saveData() {
+    const idx = document.getElementById('editIdx').value;
+    const newData = {
         s: document.getElementById('inUnit').value,
         a: document.getElementById('inAlarm').value,
         m: document.getElementById('inMaksud').value,
@@ -287,122 +271,22 @@ function saveAnnoun() {
         t: document.getElementById('inTindakan').value
     };
 
-    if(idx === "") announData.unshift(newItem);
-    else announData[idx] = newItem;
+    if (idx === "") { db.unshift(newData); } else { db[idx] = newData; }
 
-    localStorage.setItem('announ_full_v4', JSON.stringify(announData));
-    document.getElementById('editIdxAnn').value = "";
-    document.querySelectorAll('#formAnnoun input, #formAnnoun textarea').forEach(i => i.value = "");
-    toggleForm('formAnnoun');
-    renderAnnoun();
+    localStorage.setItem('GI_MASTER_DB', JSON.stringify(db));
+    closeEditor();
+    renderData();
 }
 
-function renderAnnoun() {
-    const list = document.getElementById('announList');
-    const q = document.getElementById('searchAnn').value.toLowerCase();
-    list.innerHTML = '';
-    announData.forEach((d, i) => {
-        if(d.a.toLowerCase().includes(q) || d.s.toLowerCase().includes(q)) {
-            list.innerHTML += `
-                <div class="card">
-                    <span class="unit-badge">${d.s}</span>
-                    <h3 class="alarm-title">${d.a}</h3>
-                    <div style="font-size:12px; line-height:1.5; color:#cbd5e1">
-                        <b>MAKSUD:</b> ${d.m}<br><br>
-                        <b>PENYEBAB:</b> ${d.p}<br>
-                        <div style="margin-top:10px; color:var(--accent-green); border-top:1px solid #334155; padding-top:10px;">
-                            <b>🛡️ TINDAKAN:</b> ${d.t}
-                        </div>
-                    </div>
-                    <div style="margin-top:15px; display:flex; gap:10px;">
-                        <button class="btn btn-edit" onclick="editAnnoun(${i})">EDIT</button>
-                        <button class="btn btn-del" onclick="delAnnoun(${i})">HAPUS</button>
-                    </div>
-                </div>`;
-        }
-    });
-}
-
-function editAnnoun(i) {
-    const d = announData[i];
-    document.getElementById('inUnit').value = d.s;
-    document.getElementById('inAlarm').value = d.a;
-    document.getElementById('inMaksud').value = d.m;
-    document.getElementById('inSebab').value = d.p;
-    document.getElementById('inTindakan').value = d.t;
-    document.getElementById('editIdxAnn').value = i;
-    if(document.getElementById('formAnnoun').style.display === 'none') toggleForm('formAnnoun');
-    window.scrollTo(0,0);
-}
-
-function delAnnoun(i) {
-    if(confirm('Hapus data ini?')) {
-        announData.splice(i, 1);
-        localStorage.setItem('announ_full_v4', JSON.stringify(announData));
-        renderAnnoun();
+function deleteData(index) {
+    if (confirm("ANDA YAKIN INGIN MENGHAPUS DATA INI? DATA ASLI AKAN HILANG.")) {
+        db.splice(index, 1);
+        localStorage.setItem('GI_MASTER_DB', JSON.stringify(db));
+        renderData();
     }
 }
 
-// --- CONTACT & SOP ---
-function saveContact() {
-    const idx = document.getElementById('editIdxCon').value;
-    const newItem = { name: document.getElementById('conName').value, phone: document.getElementById('conPhone').value };
-    if(idx === "") contactData.push(newItem); else contactData[idx] = newItem;
-    localStorage.setItem('contact_full_v4', JSON.stringify(contactData));
-    document.getElementById('editIdxCon').value = "";
-    toggleForm('formContact'); renderContact();
-}
-
-function renderContact() {
-    const list = document.getElementById('contactList');
-    list.innerHTML = '';
-    contactData.forEach((c, i) => {
-        list.innerHTML += `
-            <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-                <div><b>${c.name}</b><br><span style="color:var(--accent-blue)">${c.phone}</span></div>
-                <div style="display:flex; gap:5px;">
-                    <button class="btn btn-edit" style="padding:5px 10px;" onclick="editCon(${i})">✏️</button>
-                    <button class="btn btn-del" style="padding:5px 10px;" onclick="delCon(${i})">🗑️</button>
-                </div>
-            </div>`;
-    });
-}
-
-function editCon(i) {
-    document.getElementById('conName').value = contactData[i].name;
-    document.getElementById('conPhone').value = contactData[i].phone;
-    document.getElementById('editIdxCon').value = i;
-    toggleForm('formContact');
-}
-
-function delCon(i) { contactData.splice(i,1); localStorage.setItem('contact_full_v4', JSON.stringify(contactData)); renderContact(); }
-
-function saveSOP() {
-    const fileInput = document.getElementById('sopFile');
-    if(fileInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            sopData.push({ name: document.getElementById('sopName').value || fileInput.files[0].name, content: e.target.result });
-            localStorage.setItem('sop_full_v4', JSON.stringify(sopData));
-            renderSOP();
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-    }
-}
-
-function renderSOP() {
-    const list = document.getElementById('sopList');
-    list.innerHTML = sopData.map((s, i) => `
-        <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:12px;">${s.name}</span>
-            <div style="display:flex; gap:5px;">
-                <button class="btn btn-edit" style="padding:5px 10px;" onclick="window.open().document.write('<iframe src=\\'${s.content}\\' width=\\'100%\\' height=\\'100%\\'></iframe>')">VIEW</button>
-                <button class="btn btn-del" style="padding:5px 10px;" onclick="sopData.splice(${i},1); localStorage.setItem('sop_full_v4', JSON.stringify(sopData)); renderSOP();">🗑️</button>
-            </div>
-        </div>`).join('');
-}
-
-window.onload = () => { renderAnnoun(); renderContact(); renderSOP(); };
+window.onload = renderData;
 </script>
 </body>
 </html>
