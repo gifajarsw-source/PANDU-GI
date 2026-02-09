@@ -130,12 +130,12 @@
         <div class="header">
             <div style="font-size: 50px;">🛡️</div>
             <h1>PANDU-GI</h1>
-            <p>Sistem Informasi Operasional</p>
+            <p>Database & Panduan Operasional</p>
         </div>
         <div class="menu-grid">
             <div class="menu-card" onclick="openPage('announPage')">
                 <div class="icon-box bg-announ">🔍</div>
-                <div><h3>Annunciator</h3><p>Database alarm lengkap</p></div>
+                <div><h3>Annunciator</h3><p>Database alarm & solusi</p></div>
             </div>
             <div class="menu-card" onclick="openPage('sopPage')">
                 <div class="icon-box bg-sop">📜</div>
@@ -153,10 +153,10 @@
         <button onclick="toggleForm('announForm')" class="btn-action" style="background: var(--primary); color: white; width: 100%; margin-bottom: 15px; padding: 12px;">+ Tambah Alarm Baru</button>
         
         <div id="announForm" class="form-container" style="display: none;">
-            <h3 id="formTitle">Edit/Tambah Alarm</h3>
+            <h3 id="formTitle">Form Alarm</h3>
             <input type="hidden" id="editIndex">
             <input type="text" id="inUnit" class="input-field" placeholder="Unit (Contoh: TRAFO 1)">
-            <input type="text" id="inClass" class="input-field" placeholder="Class CSS (t1, t3, t4, kopel, cik1, cik2)">
+            <input type="text" id="inClass" class="input-field" placeholder="CSS Class (t1, t3, t4, kopel, cik1, cik2)">
             <input type="text" id="inAlarm" class="input-field" placeholder="Nama Alarm">
             <textarea id="inMaksud" class="input-field" placeholder="Maksud Indikasi"></textarea>
             <textarea id="inPenyebab" class="input-field" placeholder="Penyebab Kemungkinan"></textarea>
@@ -166,7 +166,7 @@
 
         <div style="background:white; padding:10px; border-radius:50px; display:flex; align-items:center; margin-bottom:20px; box-shadow:0 10px 15px rgba(0,0,0,0.05);">
             <span style="margin-left:10px;">🔍</span>
-            <input type="text" id="searchInput" placeholder="Cari unit atau nama alarm..." style="border:none; width:100%; outline:none; padding:10px;">
+            <input type="text" id="searchInput" placeholder="Cari alarm..." style="border:none; width:100%; outline:none; padding:10px;">
         </div>
         <div id="results"></div>
     </div>
@@ -191,8 +191,8 @@
         <h2>📜 Manajemen SOP PDF</h2>
         <div class="form-container">
             <input type="text" id="sopTitle" class="input-field" placeholder="Judul SOP">
-            <input type="file" id="sopFile" accept="application/pdf" style="margin: 10px 0;">
-            <button onclick="uploadSOP()" class="btn-action" style="background: var(--success); color: white; width: 100%;">Simpan ke Memory</button>
+            <input type="file" id="sopFile" accept="application/pdf">
+            <button onclick="uploadSOP()" class="btn-action" style="background: var(--success); color: white; width: 100%; margin-top:10px;">Upload PDF</button>
         </div>
         <div id="sopListContainer"></div>
     </div>
@@ -200,7 +200,7 @@
 </div>
 
 <script>
-// --- DATABASE ASLI LENGKAP 100% ---
+// --- DATABASE 100% LENGKAP TANPA DIKURANGI ---
 const fullOriginalData = [
     // TRAFO 1
     {s:"TRAFO 1", c:"t1", a:"CB Q0 – On Local", m:"Posisi PMT pada posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
@@ -260,7 +260,7 @@ const fullOriginalData = [
     {s:"TRAFO 4", c:"t4", a:"20 KV TRIP", m:"PMT Incoming 20 KV Trip", p:"Ada gangguan di 20 KV yang menyebbkan PMT Inc. Trip termasuk karena penyulang gagal Trip", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
 
     // KOPEL
-    {s:"KOPEL", c:"kopel", a:"DC supply failure", m:"Supply 110 V DC untuk panel control dan panel Rele hilang", p:"MCB C 001 untuk supply di panel proteksi dan C 002 untuk supply di panel control trip", t:"Periksa, catat, reset indikasi, dan laporkan"},
+    {s:"KOPEL", c:"kopel", a:"DC supply failure", m:"Supply 110 V DC untuk panel control dan panel Rele hilang", p:"MCB C 001 untuk supply di panel proteksi and C 002 untuk supply di panel control trip", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"KOPEL", c:"kopel", a:"OCR Start", m:"Indikasi rele OCR 150 kV yang arus hubung singkatnya malebihi setting", p:"Ada gangguan hubung singkat antara fasa-fasa sisi 150 kV", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"KOPEL", c:"kopel", a:"OCR Trip", m:"PMT 150 kV Trip karena Rele OCR 150 kV bekerja dengan indikasi OCR", p:"Ada gangguan hubung singkat antara fasa-fasa sisi 150 kV", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"KOPEL", c:"kopel", a:"GFR Start", m:"Indikasi rele GFR 150 kV yang arus hubung singkatnya malebihi setting", p:"Ada gangguan hubung singkat antara fasa tanah sisi 150 kV", t:"Periksa, catat, reset indikasi, dan laporkan"},
@@ -325,19 +325,20 @@ const fullOriginalData = [
     {s:"CIKARANG 2", c:"cik2", a:"F87L Operated", m:"PMT Trip karena Rele Differential Line bekerja", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"}
 ];
 
-let announData = JSON.parse(localStorage.getItem('announ_final_db')) || fullOriginalData;
-let contactData = JSON.parse(localStorage.getItem('contact_final_db')) || [
-    {name: "Piket UP2B", phone: "021-xxxx", desc: "Dispatch Utama"},
-    {name: "Damkar", phone: "113", desc: "Darurat Kebakaran"}
+// --- LOGIC APP ---
+let announData = JSON.parse(localStorage.getItem('announ_db_vFinal')) || fullOriginalData;
+let contactData = JSON.parse(localStorage.getItem('contact_db_vFinal')) || [
+    {name: "Dispatcher UP2B", phone: "021-xxxx", desc: "Kontrol Sistem Utama"},
+    {name: "Petugas Piket GI", phone: "08xx-xxxx", desc: "Piket Standby GI"}
 ];
 
-// --- NAVIGATION ---
 function openPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     if(id === 'announPage') renderAnnoun(announData.map((item, index) => ({item, refIndex: index})));
     if(id === 'contactPage') renderContacts();
     if(id === 'sopPage') renderSOPList();
+    window.scrollTo(0,0);
 }
 
 function toggleForm(id) {
@@ -345,7 +346,7 @@ function toggleForm(id) {
     f.style.display = f.style.display === 'none' ? 'block' : 'none';
 }
 
-// --- ANNUNCIATOR LOGIC ---
+// --- ANNUNCIATOR ---
 function saveAnnunciator() {
     const idx = document.getElementById('editIndex').value;
     const data = {
@@ -358,30 +359,9 @@ function saveAnnunciator() {
     };
     if(idx === "") announData.push(data);
     else announData[idx] = data;
-    localStorage.setItem('announ_final_db', JSON.stringify(announData));
+    localStorage.setItem('announ_db_vFinal', JSON.stringify(announData));
     toggleForm('announForm');
-    openPage('announPage');
-}
-
-function editAnnoun(idx) {
-    const d = announData[idx];
-    document.getElementById('editIndex').value = idx;
-    document.getElementById('inUnit').value = d.s;
-    document.getElementById('inClass').value = d.c;
-    document.getElementById('inAlarm').value = d.a;
-    document.getElementById('inMaksud').value = d.m;
-    document.getElementById('inPenyebab').value = d.p;
-    document.getElementById('inTindakan').value = d.t;
-    document.getElementById('announForm').style.display = 'block';
-    window.scrollTo(0,0);
-}
-
-function deleteAnnoun(idx) {
-    if(confirm("Hapus data alarm?")) {
-        announData.splice(idx, 1);
-        localStorage.setItem('announ_final_db', JSON.stringify(announData));
-        openPage('announPage');
-    }
+    renderAnnoun(announData.map((item, index) => ({item, refIndex: index})));
 }
 
 function renderAnnoun(list) {
@@ -393,52 +373,43 @@ function renderAnnoun(list) {
         div.className = `result-card ${d.c}`;
         div.innerHTML = `
             <div class="edit-tools">
-                <button onclick="editAnnoun(${r.refIndex})" class="btn-action" style="background:var(--warning); color:white;">✎</button>
                 <button onclick="deleteAnnoun(${r.refIndex})" class="btn-action" style="background:var(--danger); color:white;">✕</button>
             </div>
-            <span style="font-size:11px; font-weight:800; color:#64748b; text-transform:uppercase;">UNIT: ${d.s}</span>
-            <h3 style="color:var(--danger); margin:8px 0; font-size:18px;">${d.a}</h3>
-            <p style="font-size:14px; margin-bottom:5px;"><strong>Maksud:</strong> ${d.m}</p>
-            <p style="font-size:14px; margin-bottom:5px;"><strong>Penyebab:</strong> ${d.p}</p>
+            <small style="font-weight:700; color:#64748b;">UNIT: ${d.s}</small>
+            <h3 style="color:var(--danger); margin:5px 0;">${d.a}</h3>
+            <p><strong>Maksud:</strong> ${d.m}</p>
+            <p><strong>Penyebab:</strong> ${d.p}</p>
             <div style="background:#fffbeb; padding:12px; border-radius:12px; border:1px solid #fef3c7; margin-top:10px;">
-                <strong style="color:#92400e; font-size:14px;">⚠️ Tindakan:</strong>
-                <p style="margin:5px 0 0; color:#92400e; font-size:14px; font-weight:700;">${d.t}</p>
+                <strong style="color:#92400e;">⚠️ Tindakan:</strong>
+                <p style="margin:5px 0 0; color:#92400e; font-weight:700;">${d.t}</p>
             </div>
         `;
         res.appendChild(div);
     });
 }
 
-// --- CONTACT LOGIC ---
+function deleteAnnoun(idx) {
+    if(confirm("Hapus data ini?")) {
+        announData.splice(idx, 1);
+        localStorage.setItem('announ_db_vFinal', JSON.stringify(announData));
+        renderAnnoun(announData.map((item, index) => ({item, refIndex: index})));
+    }
+}
+
+// --- CONTACTS ---
 function saveContact() {
-    const idx = document.getElementById('editContactIndex').value;
-    const data = {
-        name: document.getElementById('conName').value,
-        phone: document.getElementById('conPhone').value,
-        desc: document.getElementById('conDesc').value
-    };
-    if(idx === "") contactData.push(data);
-    else contactData[idx] = data;
-    localStorage.setItem('contact_final_db', JSON.stringify(contactData));
+    const name = document.getElementById('conName').value;
+    const phone = document.getElementById('conPhone').value;
+    const desc = document.getElementById('conDesc').value;
+    if(!name || !phone) return alert("Nama dan Nomor wajib diisi");
+    
+    contactData.push({name, phone, desc});
+    localStorage.setItem('contact_db_vFinal', JSON.stringify(contactData));
+    document.getElementById('conName').value = '';
+    document.getElementById('conPhone').value = '';
+    document.getElementById('conDesc').value = '';
     toggleForm('contactForm');
     renderContacts();
-}
-
-function editContact(idx) {
-    const d = contactData[idx];
-    document.getElementById('editContactIndex').value = idx;
-    document.getElementById('conName').value = d.name;
-    document.getElementById('conPhone').value = d.phone;
-    document.getElementById('conDesc').value = d.desc;
-    document.getElementById('contactForm').style.display = 'block';
-}
-
-function deleteContact(idx) {
-    if(confirm("Hapus kontak?")) {
-        contactData.splice(idx, 1);
-        localStorage.setItem('contact_final_db', JSON.stringify(contactData));
-        renderContacts();
-    }
 }
 
 function renderContacts() {
@@ -449,17 +420,22 @@ function renderContacts() {
         div.className = 'contact-card';
         div.innerHTML = `
             <div>
-                <h4 style="margin:0; color:var(--primary);">${c.name}</h4>
-                <p style="margin:5px 0; font-weight:700;">📞 ${c.phone}</p>
+                <h4 style="margin:0;">${c.name}</h4>
+                <p style="margin:3px 0; font-weight:800; color:var(--primary); font-size:16px;">📞 ${c.phone}</p>
                 <small style="color:#64748b;">${c.desc}</small>
             </div>
-            <div>
-                <button onclick="editContact(${idx})" class="btn-action" style="background:var(--warning); color:white;">✎</button>
-                <button onclick="deleteContact(${idx})" class="btn-action" style="background:var(--danger); color:white;">✕</button>
-            </div>
+            <button onclick="deleteContact(${idx})" class="btn-action" style="background:var(--danger); color:white;">✕</button>
         `;
         list.appendChild(div);
     });
+}
+
+function deleteContact(idx) {
+    if(confirm("Hapus kontak?")) {
+        contactData.splice(idx, 1);
+        localStorage.setItem('contact_db_vFinal', JSON.stringify(contactData));
+        renderContacts();
+    }
 }
 
 // --- SEARCH ---
@@ -470,16 +446,16 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     renderAnnoun(fuse.search(q).map(r => ({item: r.item, refIndex: r.refIndex})));
 });
 
-// --- SOP LOGIC ---
+// --- SOP PDF ---
 function uploadSOP() {
     const title = document.getElementById('sopTitle').value;
     const file = document.getElementById('sopFile').files[0];
     if (title && file) {
         const reader = new FileReader();
         reader.onload = function(e) {
-            const sops = JSON.parse(localStorage.getItem('sop_db_final') || '[]');
+            const sops = JSON.parse(localStorage.getItem('sop_db_vFinal') || '[]');
             sops.push({title, data: e.target.result});
-            localStorage.setItem('sop_db_final', JSON.stringify(sops));
+            localStorage.setItem('sop_db_vFinal', JSON.stringify(sops));
             renderSOPList();
         };
         reader.readAsDataURL(file);
@@ -487,10 +463,9 @@ function uploadSOP() {
 }
 
 function renderSOPList() {
-    const container = document.getElementById('sopListContainer');
-    const sops = JSON.parse(localStorage.getItem('sop_db_final') || '[]');
-    container.innerHTML = sops.map((s, idx) => `
-        <div class="menu-card" style="margin-bottom:10px; justify-content:space-between;">
+    const sops = JSON.parse(localStorage.getItem('sop_db_vFinal') || '[]');
+    document.getElementById('sopListContainer').innerHTML = sops.map((s, idx) => `
+        <div class="menu-card" style="margin-top:10px; justify-content:space-between;">
             <h4>${s.title}</h4>
             <div style="display:flex; gap:5px;">
                 <button onclick="viewPDF('${idx}')" class="btn-action" style="background:var(--accent); color:white;">Buka</button>
@@ -501,21 +476,21 @@ function renderSOPList() {
 }
 
 function viewPDF(idx) {
-    const sops = JSON.parse(localStorage.getItem('sop_db_final') || '[]');
+    const sops = JSON.parse(localStorage.getItem('sop_db_vFinal') || '[]');
     const win = window.open();
-    win.document.write(`<title>${sops[idx].title}</title><iframe src="${sops[idx].data}" frameborder="0" style="width:100%; height:100vh;"></iframe>`);
+    win.document.write(`<iframe src="${sops[idx].data}" frameborder="0" style="width:100%; height:100vh;"></iframe>`);
 }
 
 function deleteSOP(idx) {
-    if(confirm("Hapus file SOP?")) {
-        let sops = JSON.parse(localStorage.getItem('sop_db_final') || '[]');
+    if(confirm("Hapus file?")) {
+        let sops = JSON.parse(localStorage.getItem('sop_db_vFinal') || '[]');
         sops.splice(idx, 1);
-        localStorage.setItem('sop_db_final', JSON.stringify(sops));
+        localStorage.setItem('sop_db_vFinal', JSON.stringify(sops));
         renderSOPList();
     }
 }
 
-window.onload = () => { renderAnnoun(announData.map((item, index) => ({item, refIndex: index}))); };
+window.onload = () => { openPage('homePage'); };
 </script>
 </body>
 </html>
