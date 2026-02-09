@@ -3,122 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANDU-GI | COMPLETE DATABASE</title>
+    <title>PANDU-GI | OPERASIONAL</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f8fafc;
+            --bg: #f1f5f9;
             --white: #ffffff;
-            --primary: #0284c7;
-            --danger: #e11d48;
-            --success: #16a34a;
-            --warning: #f59e0b;
-            --text: #1e293b;
-            --border: #e2e8f0;
+            --primary: #0369a1;
+            --danger: #be123c;
+            --success: #15803d;
+            --warning: #b45309;
+            --text: #0f172a;
+            --border: #cbd5e1;
         }
 
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 20px; }
         
-        /* Navigation Bar */
+        /* Navigation 4 Menu */
         .nav-bar { 
             display: flex; background: var(--white); position: sticky; top: 0; z-index: 1000; 
-            border-bottom: 2px solid var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            border-bottom: 3px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
         .nav-btn { 
-            flex: 1; padding: 15px 5px; border: none; background: none; font-weight: 800; 
-            font-size: 10px; color: #64748b; cursor: pointer; text-transform: uppercase; 
+            flex: 1; padding: 15px 2px; border: none; background: none; font-weight: 800; 
+            font-size: 9px; color: #64748b; cursor: pointer; text-transform: uppercase; 
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
         }
-        .nav-btn.active { color: var(--primary); border-bottom: 4px solid var(--primary); background: #f0f9ff; }
+        .nav-btn.active { color: var(--primary); background: #f0f9ff; }
+        .nav-btn.active i { border-bottom: 2px solid var(--primary); }
 
-        .container { max-width: 550px; margin: 0 auto; padding: 15px; }
+        .container { max-width: 500px; margin: 0 auto; padding: 15px; }
         .content-section { display: none; }
         .content-section.active { display: block; }
 
         /* Card Styles */
-        .card { background: var(--white); border-radius: 12px; padding: 16px; margin-bottom: 15px; border: 1px solid var(--border); }
-        .alarm-title { color: var(--danger); font-size: 17px; margin: 8px 0; font-weight: 800; }
-        .info-box { font-size: 13.5px; line-height: 1.5; color: #475569; }
-        .info-box b { color: var(--text); display: block; margin-top: 8px; font-size: 11px; text-transform: uppercase; }
+        .card { background: var(--white); border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
+        .alarm-title { color: var(--danger); font-size: 16px; margin: 8px 0; font-weight: 800; border-left: 4px solid var(--danger); padding-left: 10px; }
+        .info-box { font-size: 13px; line-height: 1.5; color: #334155; }
+        .info-box b { color: var(--text); display: block; margin-top: 8px; font-size: 11px; text-transform: uppercase; color: var(--primary); }
 
         /* Buttons & Inputs */
-        .btn { padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; }
-        .search-input { width: 100%; padding: 14px; border-radius: 10px; border: 2px solid var(--primary); margin-bottom: 15px; box-sizing: border-box; font-size: 16px; }
+        .btn { padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; width: 100%; transition: 0.2s; }
+        .search-input { width: 100%; padding: 14px; border-radius: 10px; border: 2px solid var(--primary); margin-bottom: 15px; box-sizing: border-box; font-size: 16px; outline: none; }
 
-        #editor { display: none; background: #fffbeb; border: 2px solid var(--warning); padding: 15px; border-radius: 12px; margin-bottom: 20px; }
-        input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; }
+        #editor { display: none; background: #fffbeb; border: 2px solid var(--warning); padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+
+        .btn-call { background: var(--success); color: white; text-decoration: none; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; display: block; margin-top: 10px; }
     </style>
 </head>
 <body>
 
     <nav class="nav-bar">
-        <button class="nav-btn active" onclick="showTab('db')">DATABASE</button>
-        <button class="nav-btn" onclick="showTab('sop')">SOP</button>
-        <button class="nav-btn" onclick="showTab('kontak')">KONTAK</button>
-        <button class="nav-btn" onclick="showTab('set')">PENGATURAN</button>
+        <button class="nav-btn active" onclick="showTab('annunciator')">📢<br>Annunciator</button>
+        <button class="nav-btn" onclick="showTab('sop')">📋<br>SOP</button>
+        <button class="nav-btn" onclick="showTab('kontak')">📞<br>Kontak</button>
+        <button class="nav-btn" onclick="showTab('data')">⚙️<br>Data</button>
     </nav>
 
     <div class="container">
         
-        <section id="db" class="content-section active">
-            <button class="btn" style="background:var(--primary); color:white; width:100%; margin-bottom:15px;" onclick="openAdd()">+ TAMBAH DATA BARU</button>
+        <section id="annunciator" class="content-section active">
+            <button class="btn" style="background:var(--primary); color:white; margin-bottom:15px;" onclick="openAdd()">+ INPUT ALARM BARU</button>
             
             <div id="editor">
-                <h3 id="formTitle" style="margin-top:0; font-size:14px; color:var(--warning)">EDIT DATA</h3>
+                <h3 id="formTitle" style="margin-top:0; font-size:14px; color:var(--warning)">PENGATURAN DATA ALARM</h3>
                 <input type="hidden" id="editIdx">
-                <input type="text" id="inUnit" placeholder="Unit">
-                <input type="text" id="inAlarm" placeholder="Nama Alarm">
+                <input type="text" id="inUnit" placeholder="Unit/Bay (Contoh: TRAFO 1)">
+                <input type="text" id="inAlarm" placeholder="Nama Alarm/Indikasi">
                 <textarea id="inMaksud" placeholder="Maksud Indikasi" rows="3"></textarea>
-                <textarea id="inSebab" placeholder="Penyebab" rows="3"></textarea>
-                <textarea id="inTindakan" placeholder="Tindakan" rows="3"></textarea>
-                <button class="btn" onclick="saveData()" style="background:var(--success); color:white; width:100%">SIMPAN</button>
-                <button class="btn" onclick="closeEditor()" style="background:#94a3b8; color:white; width:100%; margin-top:5px;">BATAL</button>
+                <textarea id="inSebab" placeholder="Kemungkinan Penyebab" rows="3"></textarea>
+                <textarea id="inTindakan" placeholder="Tindakan Operator" rows="3"></textarea>
+                <button class="btn" onclick="saveData()" style="background:var(--success); color:white;">SIMPAN KE DATABASE</button>
+                <button class="btn" onclick="closeEditor()" style="background:#94a3b8; color:white; margin-top:5px;">BATAL</button>
             </div>
 
-            <input type="text" id="q" class="search-input" placeholder="Cari unit atau alarm..." oninput="render()">
+            <input type="text" id="q" class="search-input" placeholder="Cari Kode Unit atau Nama Alarm..." oninput="render()">
             <div id="list"></div>
         </section>
 
         <section id="sop" class="content-section">
-            <div class="card" style="border-left: 5px solid var(--primary)">
-                <h3 style="margin-top:0">SOP GANGGUAN</h3>
-                <ol style="font-size:14px; padding-left:20px">
-                    <li>Identifikasi Alarm & Indikasi Rele</li>
-                    <li>Lapor Dispatcher / UP2B</li>
-                    <li>Cek Database PANDU-GI untuk analisa</li>
-                    <li>Eksekusi Tindakan sesuai instruksi</li>
+            <div class="card" style="border-top: 5px solid var(--primary)">
+                <h3>Langkah Penanganan Gangguan</h3>
+                <ol style="font-size:14px; padding-left:18px; line-height:1.6;">
+                    <li>Identifikasi Alarm pada Panel Annunciator.</li>
+                    <li>Catat Indikasi Rele yang bekerja di Panel Proteksi.</li>
+                    <li>Laporkan kondisi peralatan ke Dispatcher UP2B.</li>
+                    <li>Lakukan investigasi lapangan berdasarkan database PANDU-GI.</li>
+                    <li>Eksekusi instruksi Dispatcher (Reset/Manuver).</li>
                 </ol>
+            </div>
+            <div class="card" style="border-top: 5px solid var(--success)">
+                <h3>Standar K3 Operasional</h3>
+                <ul style="font-size:14px; padding-left:18px; line-height:1.6;">
+                    <li>Wajib menggunakan Helm & Sepatu Safety di area Switchyard.</li>
+                    <li>Gunakan sarung tangan isolasi saat melakukan pengoperasian manual DS.</li>
+                    <li>Dilarang bekerja sendiri saat kondisi darurat/hujan petir.</li>
+                </ul>
             </div>
         </section>
 
         <section id="kontak" class="content-section">
-            <h3 style="font-size:14px; color:var(--primary)">KONTAK OPERASIONAL</h3>
+            <h3 style="font-size:14px; color:var(--primary)">OPERASIONAL UTAMA</h3>
             <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div><b>Dispatcher UP2B</b></div>
-                    <a href="tel:02112345" style="background:var(--success); color:white; padding:8px; border-radius:5px; text-decoration:none;">CALL</a>
-                </div>
+                <b>Dispatcher UP2B (Piket)</b><br>
+                <small>Koordinasi Manuver & Tegangan</small>
+                <a href="tel:021XXXXX" class="btn-call">HUBUNGI DISPATCHER</a>
             </div>
-            <h3 style="font-size:14px; color:var(--danger)">KONTAK DARURAT</h3>
             <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div><b>Pemadam Kebakaran</b></div>
-                    <a href="tel:113" style="background:var(--danger); color:white; padding:8px; border-radius:5px; text-decoration:none;">CALL</a>
-                </div>
+                <b>Regu Pemeliharaan (ULTG)</b><br>
+                <small>Investigasi Kerusakan Peralatan</small>
+                <a href="tel:081XXXXX" class="btn-call">HUBUNGI TIM HAR</a>
+            </div>
+            
+            <h3 style="font-size:14px; color:var(--danger); margin-top:20px;">EMERGENCY / DARURAT</h3>
+            <div class="card" style="border: 2px solid var(--danger)">
+                <b>Pemadam Kebakaran (DAMKAR)</b>
+                <a href="tel:113" class="btn-call" style="background:var(--danger)">PANGGIL PEMADAM</a>
+            </div>
+            <div class="card">
+                <b>Keamanan / Security GI</b>
+                <a href="tel:123" class="btn-call" style="background:#475569">HUBUNGI SECURITY</a>
             </div>
         </section>
 
-        <section id="set" class="content-section">
+        <section id="data" class="content-section">
             <div class="card">
-                <h3>CADANGAN DATA</h3>
-                <button class="btn" style="background:#334155; color:white; width:100%; margin-bottom:10px;" onclick="exportDB()">📥 DOWNLOAD BACKUP</button>
-                <button class="btn" style="background:#e2e8f0; width:100%;" onclick="document.getElementById('fIn').click()">📤 RESTORE DATA</button>
+                <h3>Manajemen Database</h3>
+                <p style="font-size:12px; color:#64748b; margin-bottom:15px;">Gunakan menu ini untuk mengamankan data yang telah Anda edit atau tambahkan.</p>
+                
+                <button class="btn" style="background:#334155; color:white; margin-bottom:10px;" onclick="exportDB()">📥 DOWNLOAD BACKUP (.JSON)</button>
+                
+                <p style="font-size:12px; color:#64748b; margin-bottom:5px;">Restore data dari file cadangan:</p>
+                <button class="btn" style="background:#e2e8f0; color:var(--text); border:1px solid var(--border);" onclick="document.getElementById('fIn').click()">📤 RESTORE DATABASE</button>
                 <input type="file" id="fIn" style="display:none" onchange="importDB(event)">
+            </div>
+            
+            <div class="card" style="background:#fef2f2; border: 1px solid #fee2e2;">
+                <h4 style="color:var(--danger); margin-top:0;">Peringatan</h4>
+                <p style="font-size:11px; color:#b91c1c;">Menghapus cache browser secara total dapat menghilangkan data lokal. Pastikan Anda rutin melakukan <b>Download Backup</b>.</p>
             </div>
         </section>
     </div>
 
 <script>
-// DATABASE 100% LENGKAP - VERBATIM
+// DATABASE 100% LENGKAP - SESUAI DATA ASLI
 const masterData = [
     {s:"TRAFO 1", a:"CB Q0 – On Local", m:"Posisi PMT pada posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", a:"DS Q1/Q2 On Local", m:"Posisi PMS Rel Posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
@@ -130,8 +159,8 @@ const masterData = [
     {s:"TRAFO 1", a:"DS Q1/Q2 Supplay Fail", m:"Ada gangguan suplay PMS Rel di MK", p:"MCB untuk suplay motor PMS Trip ,ada kerusakan mekanik PMS", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", a:"Common Trafo Trip", m:"PMT 150/20 KV Trip karena gangguan internal Trafo hingga Rele Lock out di Panel Regulator bekerja", p:"Gangguan internal yang dideteksi oleh Rele mekanik Trafo al.Buchols Trip , Jansen Trip ,Sudden Pressure Trip", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", a:"MK Supplay Trip", m:"Ada gangguan pada suplay 380V ke MK", p:"MCB untuk supplay ke MK di ACDB trip atau Ada short circuit", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", a:"TCS 1 Failure", m:"PMT tidak siap trip karena rele trip circuit supervisori (TCS)", p:"Ada kegagala rangkaian Triping coil PMT No 1 dan No 2 atau interlok tegangan negatif", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", a:"TCS 2 Failure", m:"PMT tidak siap trip karena rele trip circuit supervisori (TCS)", p:"Ada kegagala rangkaian Triping coil PMT No 1 dan No 2 atau interlok tegangan negatif", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+    {s:"TRAFO 1", a:"TCS 1 Failure", m:"PMT tidak siap trip because rele trip circuit supervisori (TCS)", p:"Ada kegagala rangkaian Triping coil PMT No 1 dan No 2 atau interlok tegangan negatif", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+    {s:"TRAFO 1", a:"TCS 2 Failure", m:"PMT tidak siap trip because rele trip circuit supervisori (TCS)", p:"Ada kegagala rangkaian Triping coil PMT No 1 dan No 2 atau interlok tegangan negatif", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", a:"Lockout Operated", m:"Master Trip mengerjakan lockout", p:"Ada gangguan yang menyebabkan trip dan perlu investigasi lanjut", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", a:"BVT MCB Trip", m:"MCB VT busbar trip di MK", p:"Ada sort sirkit di beban VT ataupun ada beban yang melebih kapasitas MCB VT", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 3", a:"F87 TRIP", m:"PMT 150/20 kV Trip karena Rele Differential Trafo Bekerja", p:"Ada gangguan hubung singkat di kumparan Trafo ataupun di daerah pengamanannya (antara CT 150 kV dan 20 kV)", t:"Periksa, catat, reset indikasi, dan laporkan"},
@@ -232,7 +261,7 @@ const masterData = [
     {s:"CIKARANG 2", a:"F87L Operated", m:"PMT Trip karena Rele Differential Line bekerja", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"}
 ];
 
-let db = JSON.parse(localStorage.getItem('PANDU_GI_DATA_V1')) || masterData;
+let db = JSON.parse(localStorage.getItem('PANDU_MASTER_V2')) || masterData;
 
 function showTab(id) {
     document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
@@ -286,24 +315,24 @@ function saveData() {
         t: document.getElementById('inTindakan').value
     };
     if(i==='') db.unshift(data); else db[i]=data;
-    localStorage.setItem('PANDU_GI_DATA_V1', JSON.stringify(db));
+    localStorage.setItem('PANDU_MASTER_V2', JSON.stringify(db));
     closeEditor(); render();
 }
 
 function closeEditor() { document.getElementById('editor').style.display='none'; }
-function del(i) { if(confirm("Hapus data?")) { db.splice(i,1); localStorage.setItem('PANDU_GI_DATA_V1', JSON.stringify(db)); render(); } }
+function del(i) { if(confirm("Hapus data ini secara permanen?")) { db.splice(i,1); localStorage.setItem('PANDU_MASTER_V2', JSON.stringify(db)); render(); } }
 
 function exportDB() {
     const blob = new Blob([JSON.stringify(db)], {type:'application/json'});
-    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='BACKUP_PANDU_GI.json'; a.click();
+    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='PANDU_GI_BACKUP.json'; a.click();
 }
 
 function importDB(e) {
     const r = new FileReader();
     r.onload = function(f) {
         db = JSON.parse(f.target.result);
-        localStorage.setItem('PANDU_GI_DATA_V1', JSON.stringify(db));
-        render(); alert("Restore Sukses!");
+        localStorage.setItem('PANDU_MASTER_V2', JSON.stringify(db));
+        render(); alert("Database Berhasil dipulihkan!");
     };
     r.readAsText(e.target.files[0]);
 }
