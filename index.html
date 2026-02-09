@@ -6,182 +6,270 @@
     <title>PANDU-GI | Future Operations</title>
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    
     <style>
+        /* CSS RESET & VARIABLES */
         :root {
-            --bg-dark: #070b14;
-            --card-bg: rgba(17, 24, 39, 0.8);
-            --neon-blue: #00d2ff;
-            --neon-green: #00ff88;
-            --neon-red: #ff3366;
-            --text-main: #e2e8f0;
-            --text-dim: #94a3b8;
+            --bg-deep: #020617;
+            --accent-blue: #00f2ff;
+            --accent-green: #10b981;
+            --accent-red: #ff2d55;
+            --glass-bg: rgba(15, 23, 42, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: radial-gradient(circle at 50% 0%, #1e293b 0%, #070b14 100%);
+            background-color: var(--bg-deep);
+            background-image: 
+                radial-gradient(circle at 50% -20%, #1e293b, transparent),
+                radial-gradient(circle at 0% 100%, #0f172a, transparent);
             background-attachment: fixed;
             margin: 0;
-            color: var(--text-main);
+            color: var(--text-primary);
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .container {
-            width: 100%;
-            max-width: 500px;
+        /* CONTAINER UTAMA */
+        .app-wrapper {
+            max-width: 480px;
             margin: 0 auto;
             padding: 20px;
             box-sizing: border-box;
         }
 
-        .glass {
-            background: var(--card-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 24px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+        /* LOGO & BRANDING */
+        .branding-section {
+            text-align: center;
+            padding: 40px 0 30px;
         }
 
-        /* Branding */
-        .header { text-align: center; padding: 40px 0 20px; }
-        .pln-logo { 
-            width: 50px; 
-            margin-bottom: 15px;
-            filter: drop-shadow(0 0 8px rgba(0, 210, 255, 0.5));
+        .pln-logo-main {
+            width: 55px;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 15px rgba(0, 242, 255, 0.4));
         }
-        .title-brand {
+
+        .brand-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 32px;
+            font-size: 34px;
             font-weight: 700;
-            letter-spacing: 3px;
-            background: linear-gradient(135deg, #fff 0%, #00d2ff 100%);
+            letter-spacing: 5px;
+            margin: 0;
+            background: linear-gradient(180deg, #fff 0%, var(--accent-blue) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin: 0;
+            filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.3));
         }
 
-        /* Menu */
-        .menu-grid { display: grid; gap: 16px; margin-top: 30px; }
-        .menu-card {
-            padding: 22px;
+        .brand-tagline {
+            font-size: 10px;
+            letter-spacing: 3px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+
+        /* MENU GRID MODERN */
+        .menu-grid {
+            display: grid;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .menu-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 25px;
             display: flex;
             align-items: center;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            border-left: 4px solid transparent;
         }
-        .menu-card:active { transform: scale(0.97); }
-        .mc-announ { border-left-color: var(--neon-blue); }
-        .mc-sop { border-left-color: var(--neon-green); }
-        .mc-contact { border-left-color: var(--neon-red); }
 
-        .icon-sphere {
-            width: 45px; height: 45px; border-radius: 14px;
+        .menu-item:hover {
+            transform: translateY(-5px);
+            background: rgba(30, 41, 59, 0.9);
+            border-color: var(--accent-blue);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+        }
+
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; width: 4px; height: 100%;
+        }
+
+        .m-announ::before { background: var(--accent-blue); box-shadow: 0 0 15px var(--accent-blue); }
+        .m-sop::before { background: var(--accent-green); box-shadow: 0 0 15px var(--accent-green); }
+        .m-contact::before { background: var(--accent-red); box-shadow: 0 0 15px var(--accent-red); }
+
+        .icon-box {
+            font-size: 24px;
+            margin-right: 20px;
+            background: rgba(255,255,255,0.05);
+            width: 50px; height: 50px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 20px; margin-right: 18px;
-            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
         }
 
-        /* Pages */
-        .page { display: none; animation: fadeIn 0.4s ease; }
-        .active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .btn-back {
-            background: rgba(255,255,255,0.05); color: #fff;
-            border: 1px solid rgba(255,255,255,0.1); padding: 12px;
-            border-radius: 12px; cursor: pointer; margin-bottom: 20px; width: 100%;
-            font-family: 'Orbitron', sans-serif; font-size: 12px;
+        /* NAVIGATION */
+        .page { display: none; animation: pageIn 0.5s ease both; }
+        .page.active { display: block; }
+        @keyframes pageIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Search */
-        .search-container {
-            background: rgba(0,0,0,0.3); border-radius: 15px;
-            padding: 5px 15px; display: flex; align-items: center;
-            border: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;
+        .btn-back-nav {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--glass-border);
+            padding: 10px 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 11px;
+            margin-bottom: 25px;
+            display: flex; align-items: center; gap: 8px;
         }
-        .search-container input {
+
+        /* SEARCH BAR */
+        .search-wrapper {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 8px 18px;
+            display: flex; align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .search-wrapper input {
             background: transparent; border: none; color: white;
-            padding: 12px; width: 100%; outline: none;
+            padding: 12px; width: 100%; outline: none; font-size: 15px;
         }
 
-        /* Result Cards */
-        .result-card { padding: 18px; margin-bottom: 16px; position: relative; }
-        .unit-badge {
-            font-size: 9px; font-weight: 800; background: var(--neon-blue);
-            color: #000; padding: 3px 8px; border-radius: 4px; display: inline-block;
-            margin-bottom: 8px;
-        }
-        .alarm-title { color: var(--neon-red); margin: 0 0 10px 0; font-size: 18px; }
-        .info-box { font-size: 13px; color: var(--text-dim); margin-bottom: 10px; }
-        .action-box {
-            background: rgba(0, 255, 136, 0.05); border: 1px solid rgba(0, 255, 136, 0.2);
-            padding: 12px; border-radius: 12px; color: var(--neon-green); font-size: 13px;
+        /* DATA CARDS */
+        .data-card {
+            background: var(--glass-bg);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--glass-border);
         }
 
-        /* Contact Items */
-        .contact-item { padding: 15px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .contact-phone { color: var(--neon-blue); font-weight: bold; font-size: 18px; text-decoration: none; }
+        .unit-label {
+            font-size: 10px; font-weight: 800; color: #000;
+            background: var(--accent-blue); padding: 3px 10px;
+            border-radius: 6px; display: inline-block; margin-bottom: 12px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .alarm-name { 
+            color: var(--accent-red); font-size: 20px; margin: 0 0 15px 0; 
+            font-weight: 800; line-height: 1.2;
+        }
+
+        .info-grid { font-size: 13px; line-height: 1.6; color: var(--text-secondary); }
+        .info-grid b { color: var(--text-primary); display: block; margin-top: 10px; }
+
+        .action-highlight {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 15px; padding: 15px; margin-top: 15px;
+            color: var(--accent-green); font-weight: 600;
+        }
+
+        /* CONTACT LIST */
+        .contact-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px; background: rgba(255,255,255,0.03);
+            border-radius: 16px; margin-bottom: 10px;
+        }
+
+        .call-btn {
+            background: var(--accent-blue); color: #000;
+            padding: 8px 15px; border-radius: 10px;
+            text-decoration: none; font-weight: 800; font-size: 13px;
+        }
+
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="app-wrapper">
     
     <div id="homePage" class="page active">
-        <div class="header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Logo_PLN.svg" alt="PLN" class="pln-logo">
-            <h1 class="title-brand">PANDU-GI</h1>
-            <p style="font-size: 10px; letter-spacing: 2px; color: var(--neon-blue);">DIGITAL ASSISTANT SYSTEM</p>
+        <div class="branding-section">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Logo_PLN.svg" alt="PLN" class="pln-logo-main">
+            <h1 class="brand-title">PANDU-GI</h1>
+            <div class="brand-tagline">Operator Digital Assistant</div>
         </div>
 
         <div class="menu-grid">
-            <div class="menu-card glass mc-announ" onclick="openPage('announPage')">
-                <div class="icon-sphere">🔍</div>
-                <div><h3 style="margin:0;">Annunciator</h3><p style="margin:4px 0 0; font-size:11px; color:var(--text-dim);">Database Alarm & Solusi</p></div>
+            <div class="menu-item m-announ" onclick="openPage('announPage')">
+                <div class="icon-box">📡</div>
+                <div>
+                    <h3 style="margin:0; font-size:18px;">Annunciator</h3>
+                    <div style="font-size:12px; color:var(--text-secondary);">Database & Troubleshooting</div>
+                </div>
             </div>
-            <div class="menu-card glass mc-sop" onclick="openPage('sopPage')">
-                <div class="icon-sphere">📄</div>
-                <div><h3 style="margin:0;">Panduan SOP</h3><p style="margin:4px 0 0; font-size:11px; color:var(--text-dim);">Digital Standard Procedure</p></div>
+
+            <div class="menu-item m-sop" onclick="openPage('sopPage')">
+                <div class="icon-box">📘</div>
+                <div>
+                    <h3 style="margin:0; font-size:18px;">Panduan SOP</h3>
+                    <div style="font-size:12px; color:var(--text-secondary);">Standard Operation Procedure</div>
+                </div>
             </div>
-            <div class="menu-card glass mc-contact" onclick="openPage('contactPage')">
-                <div class="icon-sphere">📞</div>
-                <div><h3 style="margin:0;">Kontak Darurat</h3><p style="margin:4px 0 0; font-size:11px; color:var(--text-dim);">Emergency Hotline</p></div>
+
+            <div class="menu-item m-contact" onclick="openPage('contactPage')">
+                <div class="icon-box">📞</div>
+                <div>
+                    <h3 style="margin:0; font-size:18px;">Kontak Darurat</h3>
+                    <div style="font-size:12px; color:var(--text-secondary);">Emergency Hotlines</div>
+                </div>
             </div>
         </div>
     </div>
 
     <div id="announPage" class="page">
-        <button class="btn-back" onclick="openPage('homePage')">« KEMBALI KE SISTEM</button>
-        <div class="search-container">
-            <input type="text" id="searchInput" placeholder="Cari alarm atau unit...">
+        <button class="btn-back-nav" onclick="openPage('homePage')">← SYSTEM DASHBOARD</button>
+        <div class="search-wrapper">
+            <span>🔍</span>
+            <input type="text" id="searchInput" placeholder="Cari unit atau nama alarm...">
         </div>
-        <div id="results"></div>
+        <div id="resultsArea"></div>
     </div>
 
     <div id="contactPage" class="page">
-        <button class="btn-back" onclick="openPage('homePage')">« KEMBALI KE SISTEM</button>
-        <h3 style="font-family:'Orbitron'; color:var(--neon-red);">HOTLINE PENTING</h3>
-        <div id="contactList"></div>
+        <button class="btn-back-nav" onclick="openPage('homePage')">← SYSTEM DASHBOARD</button>
+        <h2 style="font-family:'Orbitron'; color:var(--accent-red); letter-spacing:2px;">EMERGENCY CALL</h2>
+        <div id="contactArea"></div>
     </div>
 
     <div id="sopPage" class="page">
-        <button class="btn-back" onclick="openPage('homePage')">« KEMBALI KE SISTEM</button>
-        <div class="glass" style="padding:20px;">
-            <p style="font-size:12px; color:var(--text-dim);">Upload SOP Baru (PDF):</p>
-            <input type="file" id="sopFile" accept="application/pdf" style="margin-bottom:15px; font-size:12px;">
-            <button onclick="uploadSOP()" style="width:100%; padding:10px; background:var(--neon-green); border:none; border-radius:8px; font-weight:bold;">UPLOAD FILE</button>
+        <button class="btn-back-nav" onclick="openPage('homePage')">← SYSTEM DASHBOARD</button>
+        <div class="data-card">
+            <h4 style="margin:0 0 15px 0;">Upload Dokumen PDF</h4>
+            <input type="file" id="sopFile" accept="application/pdf" style="margin-bottom:15px; display:block;">
+            <button onclick="uploadSOP()" style="width:100%; padding:12px; background:var(--accent-green); border:none; border-radius:12px; font-weight:800; cursor:pointer;">STORE TO ARCHIVE</button>
         </div>
-        <div id="sopListContainer" style="margin-top:20px;"></div>
+        <div id="sopListArea" style="margin-top:20px;"></div>
     </div>
 
 </div>
 
 <script>
-// --- DATABASE 100% LENGKAP TANPA PERUBAHAN ---
-const fullOriginalData = [
+// --- DATABASE 100% LENGKAP TANPA DIKURANGI ---
+const dbCore = [
     // TRAFO 1
     {s:"TRAFO 1", a:"CB Q0 – On Local", m:"Posisi PMT pada posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", a:"DS Q1/Q2 On Local", m:"Posisi PMS Rel Posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
@@ -305,90 +393,105 @@ const fullOriginalData = [
     {s:"CIKARANG 2", a:"F87L Operated", m:"PMT Trip karena Rele Differential Line bekerja", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"}
 ];
 
-let announData = JSON.parse(localStorage.getItem('announ_vFinal')) || fullOriginalData;
-let contactData = JSON.parse(localStorage.getItem('contact_vFinal')) || [
-    {name: "Piket UP2B", phone: "021-xxxx", desc: "Dispatch Utama"},
-    {name: "Damkar", phone: "113", desc: "Darurat Kebakaran"},
-    {name: "Ambulans", phone: "118", desc: "Darurat Medis"}
+// DATA KONTAK
+const contactDB = [
+    {name: "Piket UP2B", phone: "0217456789", desc: "Dispatcher Utama"},
+    {name: "Piket GI", phone: "081234567890", desc: "Operator Standby"},
+    {name: "Damkar", phone: "113", desc: "Emergency Kebakaran"}
 ];
 
+// --- APP LOGIC ---
 function openPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    if(id === 'announPage') renderAnnoun(announData.map((item, index) => ({item, refIndex: index})));
+    if(id === 'announPage') renderAnnoun(dbCore);
     if(id === 'contactPage') renderContacts();
     window.scrollTo(0,0);
 }
 
-function renderAnnoun(list) {
-    const res = document.getElementById('results');
-    res.innerHTML = '';
-    list.forEach(r => {
-        const d = r.item;
-        const div = document.createElement('div');
-        div.className = 'glass result-card';
-        div.innerHTML = `
-            <span class="unit-badge">${d.s}</span>
-            <h3 class="alarm-title">${d.a}</h3>
-            <div class="info-box"><strong>MAKSUD:</strong><br>${d.m}</div>
-            <div class="info-box"><strong>PENYEBAB:</strong><br>${d.p}</div>
-            <div class="action-box"><strong>⚠️ TINDAKAN:</strong><br>${d.t}</div>
+function renderAnnoun(data) {
+    const area = document.getElementById('resultsArea');
+    area.innerHTML = '';
+    data.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'data-card';
+        card.innerHTML = `
+            <div class="unit-label">${item.s}</div>
+            <h3 class="alarm-name">${item.a}</h3>
+            <div class="info-grid">
+                <b>MAKSUD INDIKASI:</b> ${item.m}
+                <b>KEMUNGKINAN PENYEBAB:</b> ${item.p}
+            </div>
+            <div class="action-highlight">
+                🛡️ TINDAKAN: ${item.t}
+            </div>
         `;
-        res.appendChild(div);
+        area.appendChild(card);
     });
 }
 
 function renderContacts() {
-    const list = document.getElementById('contactList');
-    list.innerHTML = '';
-    contactData.forEach(c => {
-        const div = document.createElement('div');
-        div.className = 'glass contact-item';
-        div.innerHTML = `
-            <div>
-                <h4 style="margin:0;">${c.name}</h4>
-                <small style="color:var(--text-dim);">${c.desc}</small>
+    const area = document.getElementById('contactArea');
+    area.innerHTML = '';
+    contactDB.forEach(c => {
+        area.innerHTML += `
+            <div class="contact-row">
+                <div>
+                    <div style="font-weight:800;">${c.name}</div>
+                    <div style="font-size:11px; color:var(--text-secondary);">${c.desc}</div>
+                </div>
+                <a href="tel:${c.phone}" class="call-btn">CALL NOW</a>
             </div>
-            <a href="tel:${c.phone}" class="contact-phone">${c.phone}</a>
         `;
-        list.appendChild(div);
     });
 }
 
 // SEARCH ENGINE
 document.getElementById('searchInput').addEventListener('input', (e) => {
-    const q = e.target.value;
-    if(!q) return renderAnnoun(announData.map((item, index) => ({item, refIndex: index})));
-    const fuse = new Fuse(announData, { keys: ['a', 's', 'm', 'p', 't'], threshold: 0.3 });
-    renderAnnoun(fuse.search(q).map(r => ({item: r.item, refIndex: r.refIndex})));
+    const query = e.target.value.toLowerCase();
+    if(!query) return renderAnnoun(dbCore);
+    
+    const results = dbCore.filter(item => 
+        item.a.toLowerCase().includes(query) || 
+        item.s.toLowerCase().includes(query) ||
+        item.m.toLowerCase().includes(query)
+    );
+    renderAnnoun(results);
 });
 
-// PDF STORAGE
+// PDF STORAGE (LocalStorage)
 function uploadSOP() {
-    const file = document.getElementById('sopFile').files[0];
-    if (file) {
+    const fileInput = document.getElementById('sopFile');
+    if(fileInput.files[0]) {
         const reader = new FileReader();
-        reader.onload = function(e) {
-            const sops = JSON.parse(localStorage.getItem('sop_vFinal') || '[]');
-            sops.push({title: file.name, data: e.target.result});
-            localStorage.setItem('sop_vFinal', JSON.stringify(sops));
+        reader.onload = (e) => {
+            const sops = JSON.parse(localStorage.getItem('gi_sops') || '[]');
+            sops.push({ name: fileInput.files[0].name, content: e.target.result });
+            localStorage.setItem('gi_sops', JSON.stringify(sops));
             renderSOPList();
         };
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(fileInput.files[0]);
     }
 }
 
 function renderSOPList() {
-    const sops = JSON.parse(localStorage.getItem('sop_vFinal') || '[]');
-    document.getElementById('sopListContainer').innerHTML = sops.map((s, idx) => `
-        <div class="glass" style="padding:15px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-size:12px;">${s.title}</span>
-            <button onclick="window.open().document.write('<iframe src=\\'${s.data}\\' style=\\'width:100%;height:100vh;border:none;\\'></iframe>')" style="background:var(--neon-blue); border:none; padding:5px 10px; border-radius:5px; font-size:11px; font-weight:bold;">BUKA</button>
+    const area = document.getElementById('sopListArea');
+    const sops = JSON.parse(localStorage.getItem('gi_sops') || '[]');
+    area.innerHTML = sops.map((s, idx) => `
+        <div class="contact-row">
+            <span style="font-size:12px; width:70%;">${s.name}</span>
+            <button onclick="viewPDF(${idx})" class="call-btn" style="background:var(--accent-green);">OPEN</button>
         </div>
     `).join('');
 }
 
-window.onload = () => { openPage('homePage'); renderSOPList(); };
+function viewPDF(idx) {
+    const sops = JSON.parse(localStorage.getItem('gi_sops') || '[]');
+    const win = window.open();
+    win.document.write(`<iframe src="${sops[idx].content}" frameborder="0" style="width:100%; height:100vh;"></iframe>`);
+}
+
+window.onload = () => { renderSOPList(); };
 </script>
 </body>
 </html>
