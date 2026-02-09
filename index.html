@@ -3,198 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANDU-GI | BRIGHT VERSION</title>
+    <title>PANDU-GI | FULL SYSTEM</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Montserrat:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #f8fafc;
+            --bg: #f0f4f8;
             --white: #ffffff;
             --primary: #0284c7;
             --danger: #e11d48;
             --success: #16a34a;
             --warning: #f59e0b;
             --text: #1e293b;
-            --border: #e2e8f0;
+            --border: #cbd5e1;
         }
 
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 40px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 60px; }
         .container { max-width: 550px; margin: 0 auto; padding: 15px; }
 
-        /* Header */
-        .header { text-align: center; padding: 25px 0; background: var(--white); border-bottom: 2px solid var(--primary); margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .logo { width: 45px; margin-bottom: 8px; }
-        .title { font-family: 'Montserrat', sans-serif; color: var(--primary); font-size: 24px; margin: 0; }
+        /* Modern Navigation Tabs */
+        .nav-tabs { display: flex; background: var(--white); position: sticky; top: 0; z-index: 2000; border-bottom: 2px solid var(--primary); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .tab-btn { flex: 1; padding: 15px 5px; border: none; background: none; font-weight: 800; font-size: 10px; color: var(--text); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .tab-btn.active { color: var(--primary); border-bottom: 4px solid var(--primary); background: #f8fafc; }
 
-        /* Form Editor */
+        /* Header Area */
+        .header { text-align: center; padding: 20px 0; background: var(--white); margin-bottom: 15px; }
+        .logo { width: 40px; }
+        .title { font-family: 'Montserrat', sans-serif; color: var(--primary); font-size: 20px; margin: 5px 0; }
+
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+
+        /* Database & Cards */
         #editorSection {
-            display: none; background: var(--white); border: 2px solid var(--warning);
-            border-radius: 15px; padding: 20px; margin-bottom: 25px;
-            position: sticky; top: 10px; z-index: 1000; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: none; background: var(--white); border: 3px solid var(--warning);
+            border-radius: 15px; padding: 20px; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-        input, textarea {
-            width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid var(--border);
-            border-radius: 8px; font-family: inherit; box-sizing: border-box; background: #f1f5f9;
-        }
+        input, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit; box-sizing: border-box; background: #f8fafc; }
 
-        /* Buttons */
-        .btn { padding: 12px; border-radius: 10px; border: none; cursor: pointer; font-weight: 700; transition: 0.2s; font-size: 13px; }
-        .btn-add { background: var(--success); color: white; width: 100%; margin-bottom: 15px; font-size: 15px; }
-        .btn-save { background: var(--primary); color: white; width: 100%; }
-        .btn-cancel { background: #94a3b8; color: white; width: 100%; margin-top: 8px; }
+        .btn { padding: 12px; border-radius: 10px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; }
+        .btn-add { background: var(--primary); color: white; width: 100%; margin-bottom: 10px; }
         
-        /* Backup Buttons - NEW & VISIBLE */
-        .backup-group { display: flex; gap: 10px; margin-bottom: 20px; }
-        .btn-backup { background: #f1f5f9; color: var(--text); border: 1px solid var(--border); flex: 1; font-size: 11px; }
+        .backup-group { display: flex; gap: 8px; margin-bottom: 20px; }
+        .btn-backup { background: #e2e8f0; color: var(--text); flex: 1; font-size: 10px; }
 
-        /* Card Data */
-        .card { background: var(--white); border-radius: 15px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border: 1px solid var(--border); }
-        .tag { background: #e0f2fe; color: var(--primary); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; text-transform: uppercase; }
-        .alarm-title { color: var(--danger); font-size: 18px; margin: 12px 0; font-weight: 800; line-height: 1.3; }
+        .card { background: var(--white); border-radius: 15px; padding: 18px; margin-bottom: 15px; border: 1px solid var(--border); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .tag { background: #e0f2fe; color: var(--primary); padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 800; }
+        .alarm-title { color: var(--danger); font-size: 17px; margin: 10px 0; font-weight: 800; }
         .info-text { font-size: 14px; line-height: 1.5; color: #475569; }
-        .info-text b { color: var(--text); display: block; margin-top: 8px; font-size: 12px; text-transform: uppercase; }
+        .info-text b { color: var(--text); display: block; margin-top: 8px; font-size: 11px; text-transform: uppercase; }
 
-        .actions { display: flex; gap: 10px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--border); }
+        .actions { display: flex; gap: 10px; margin-top: 15px; padding-top: 12px; border-top: 1px dashed var(--border); }
         .btn-edit { background: #fef3c7; color: #92400e; flex: 1; }
         .btn-del { background: #fee2e2; color: #991b1b; flex: 1; }
 
-        .search { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid var(--primary); margin-bottom: 20px; box-sizing: border-box; font-size: 16px; outline: none; }
+        /* SOP & KONTAK STYLE */
+        .sop-card { background: var(--white); border-radius: 15px; padding: 20px; border-left: 5px solid var(--primary); margin-bottom: 15px; }
+        .kontak-card { background: var(--white); border-radius: 15px; padding: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; border: 1px solid var(--border); }
+        .kontak-info h4 { margin: 0; color: var(--primary); }
+        .kontak-info p { margin: 2px 0; font-size: 13px; color: var(--secondary); }
+        .btn-call { background: var(--success); color: white; padding: 8px 15px; border-radius: 8px; text-decoration: none; font-size: 12px; font-weight: bold; }
+
+        .search { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid var(--primary); margin-bottom: 15px; box-sizing: border-box; font-size: 16px; }
     </style>
 </head>
 <body>
 
-<div class="container">
+    <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="openTab(event, 'database')">DATABASE</button>
+        <button class="tab-btn" onclick="openTab(event, 'sop')">SOP KERJA</button>
+        <button class="tab-btn" onclick="openTab(event, 'kontak')">KONTAK</button>
+    </nav>
+
     <div class="header">
         <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Logo_PLN.svg" class="logo">
         <h1 class="title">PANDU-GI</h1>
     </div>
 
-    <div id="editorSection">
-        <h2 id="formTitle" style="font-size:16px; margin-top:0;">EDIT DATA</h2>
-        <input type="hidden" id="editIdx">
-        <input type="text" id="inUnit" placeholder="Unit (Contoh: TRAFO 1)">
-        <input type="text" id="inAlarm" placeholder="Nama Alarm">
-        <textarea id="inMaksud" placeholder="Maksud Indikasi" rows="3"></textarea>
-        <textarea id="inSebab" placeholder="Penyebab" rows="3"></textarea>
-        <textarea id="inTindakan" placeholder="Tindakan" rows="3"></textarea>
-        <button class="btn btn-save" onclick="saveData()">SIMPAN DATA</button>
-        <button class="btn btn-cancel" onclick="closeEditor()">BATAL</button>
-    </div>
-
-    <button class="btn btn-add" onclick="openAdd()">+ TAMBAH ALARM BARU</button>
-
-    <div class="backup-group">
-        <button class="btn btn-backup" onclick="exportDB()">📥 DOWNLOAD BACKUP</button>
-        <button class="btn btn-backup" onclick="document.getElementById('fileIn').click()">📤 RESTORE DATA</button>
-        <input type="file" id="fileIn" style="display:none" onchange="importDB(event)">
-    </div>
-
-    <input type="text" id="searchInput" class="search" placeholder="Cari alarm atau unit..." oninput="render()">
-
-    <div id="listDisplay"></div>
-</div>
-
-<script>
-// DATABASE 100% LENGKAP TANPA DIKURANGI
-const fullData = [
-    {s:"TRAFO 1", a:"CB Q0 – On Local", m:"Posisi PMT pada posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", a:"DS Q1/Q2 On Local", m:"Posisi PMS Rel Posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", a:"Common Trafo Alarm", m:"Ada Rele Lock Out mekanik yang kerja di Panel Regulator Trafo", p:"Ada gangguan Internal trafo (Winding HV / LV alarm , Buchols alarm , Oil level ) yang terdeteksi Rele mekanik", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", a:"Alarm SF6 Low Level", m:"Ada penurunan tekanan Gas SF6 di PMT sampai level Alarm ( 5,6 BAR )", p:"Ada kebocoran di system pengisian maupun kerusakan seal di PMT", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", a:"CB lockout SF6 Operated", m:"Ada penurunan tekanan Gas SF6 di PMT sampai level Lockout", p:"Ada kebocoran di system pengisian maupun kerusakan seal di PMT", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", a:"CB Mecanic Spring Discarge", m:"Pegas PMT tidak siap untuk operasi", p:"Suplay 110 untuk motor terganggu ,mekanik pengisian pegas rusak", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", a:"CB Supplay Failure", m:"Ada gangguan suplay DC 380 V pada PMT", p:"MCB 3 pole QF1 di MK Trip", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", a:"DS Q1/Q2 Supplay Fail", m:"Ada gangguan suplay PMS Rel di MK", p:"MCB untuk suplay motor PMS Trip ,ada kerusakan mekanik PMS", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", a:"Common Trafo Trip", m:"PMT 150/20 KV Trip karena gangguan internal Trafo hingga Rele Lock out di Panel Regulator bekerja", p:"Gangguan internal yang dideteksi oleh Rele mekanik Trafo al.Buchols Trip , Jansen Trip ,Sudden Pressure Trip", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 3", a:"F87 TRIP", m:"PMT 150/20 kV Trip karena Rele Differential Trafo Bekerja", p:"Ada gangguan hubung singkat di kumparan Trafo ataupun di daerah pengamanannya (antara CT 150 kV dan 20 kV)", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", a:"F87 FAIL", m:"Rele Differential Trafo Bekerja", p:"Ada gangguan hubung singkat di kumparan Trafo ataupun di daerah pengamanannya (antara CT 150 kV dan 20 kV)", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"KOPEL", a:"DC supply failure", m:"Supply 110 V DC untuk panel control dan panel Rele hilang", p:"MCB C 001 untuk supply di panel proteksi and C 002 untuk supply di panel control trip", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"CIKARANG 1", a:"F21 Operated", m:"PMT Trip karena Rele Distance bekerja", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"},
-    {s:"CIKARANG 2", a:"F87L Operated", m:"PMT Trip karena Rele Differential Line bekerja", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"}
-    // Semua data asli Anda sudah tertanam secara sistematis
-];
-
-let db = JSON.parse(localStorage.getItem('PANDU_GI_DATA')) || fullData;
-
-function render() {
-    const list = document.getElementById('listDisplay');
-    const q = document.getElementById('searchInput').value.toLowerCase();
-    list.innerHTML = '';
-    db.forEach((item, i) => {
-        if(item.s.toLowerCase().includes(q) || item.a.toLowerCase().includes(q)) {
-            list.innerHTML += `
-            <div class="card">
-                <span class="tag">${item.s}</span>
-                <div class="alarm-title">${item.a}</div>
-                <div class="info-text">
-                    <b>Maksud:</b> ${item.m}
-                    <b>Penyebab:</b> ${item.p}
-                    <b style="color:var(--success)">🛡️ Tindakan:</b> ${item.t}
-                </div>
-                <div class="actions">
-                    <button class="btn btn-edit" onclick="openEdit(${i})">✏️ EDIT</button>
-                    <button class="btn btn-del" onclick="removeData(${i})">🗑️ HAPUS</button>
-                </div>
-            </div>`;
-        }
-    });
-}
-
-// LOGIKA EDIT & TAMBAH
-function openAdd() {
-    document.getElementById('editorSection').style.display = 'block';
-    document.getElementById('editIdx').value = '';
-    document.querySelectorAll('#editorSection input, #editorSection textarea').forEach(el => el.value = '');
-    window.scrollTo(0,0);
-}
-
-function openEdit(i) {
-    const item = db[i];
-    document.getElementById('editorSection').style.display = 'block';
-    document.getElementById('editIdx').value = i;
-    document.getElementById('inUnit').value = item.s;
-    document.getElementById('inAlarm').value = item.a;
-    document.getElementById('inMaksud').value = item.m;
-    document.getElementById('inSebab').value = item.p;
-    document.getElementById('inTindakan').value = item.t;
-    window.scrollTo(0,0);
-}
-
-function saveData() {
-    const i = document.getElementById('editIdx').value;
-    const data = {
-        s: document.getElementById('inUnit').value,
-        a: document.getElementById('inAlarm').value,
-        m: document.getElementById('inMaksud').value,
-        p: document.getElementById('inSebab').value,
-        t: document.getElementById('inTindakan').value
-    };
-    if(i === '') db.unshift(data); else db[i] = data;
-    localStorage.setItem('PANDU_GI_DATA', JSON.stringify(db));
-    closeEditor(); render();
-}
-
-function closeEditor() { document.getElementById('editorSection').style.display = 'none'; }
-function removeData(i) { if(confirm("Hapus?")) { db.splice(i,1); localStorage.setItem('PANDU_GI_DATA', JSON.stringify(db)); render(); } }
-
-// FITUR BACKUP & RESTORE (AKTIF)
-function exportDB() {
-    const blob = new Blob([JSON.stringify(db)], {type: 'application/json'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'BACKUP_PANDU_GI.json'; a.click();
-}
-
-function importDB(e) {
-    const reader = new FileReader();
-    reader.onload = function(f) {
-        db = JSON.parse(f.target.result);
-        localStorage.setItem('PANDU_GI_DATA', JSON.stringify(db));
-        render(); alert("Data Berhasil di-Restore!");
-    };
-    reader.readAsText(e.target.files[0]);
-}
-
-window.onload = render;
-</script>
-</body>
-</html>
+    <div class="container">
+        <section id="database" class="content-section active">
+            <div id="editorSection">
+                <h2 id="formTitle" style="font-size:16px; margin-top:0;">EDIT ALARM</h2>
+                <input type="hidden" id="editIdx">
+                <input type="text" id="inUnit" placeholder="Unit">
+                <input type="text" id="inAlarm" placeholder="Alarm">
