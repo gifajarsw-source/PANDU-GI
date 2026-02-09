@@ -3,273 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANDU-GI | Future Operations</title>
-    <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
+    <title>PANDU-GI | Full Database</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
-    
     <style>
-        /* CSS RESET & VARIABLES */
         :root {
             --bg-deep: #020617;
             --accent-blue: #00f2ff;
             --accent-green: #10b981;
             --accent-red: #ff2d55;
-            --glass-bg: rgba(15, 23, 42, 0.8);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
+            --glass: rgba(15, 23, 42, 0.95);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #f8fafc;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-deep);
-            background-image: 
-                radial-gradient(circle at 50% -20%, #1e293b, transparent),
-                radial-gradient(circle at 0% 100%, #0f172a, transparent);
-            background-attachment: fixed;
-            margin: 0;
-            color: var(--text-primary);
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
+            background: radial-gradient(circle at 50% 0%, #1e293b, #020617);
+            background-attachment: fixed; margin: 0; color: var(--text); min-height: 100vh;
         }
 
-        /* CONTAINER UTAMA */
-        .app-wrapper {
-            max-width: 480px;
-            margin: 0 auto;
-            padding: 20px;
-            box-sizing: border-box;
+        .container { max-width: 500px; margin: 0 auto; padding: 20px; box-sizing: border-box; }
+
+        /* Header & Branding */
+        .header { text-align: center; padding: 20px 0; }
+        .logo { width: 55px; filter: drop-shadow(0 0 10px var(--accent-blue)); margin-bottom: 10px; }
+        .title { 
+            font-family: 'Orbitron', sans-serif; font-size: 30px; letter-spacing: 4px; 
+            background: linear-gradient(to bottom, #fff, var(--accent-blue));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;
         }
 
-        /* LOGO & BRANDING */
-        .branding-section {
-            text-align: center;
-            padding: 40px 0 30px;
+        /* Menu Card */
+        .card { 
+            background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--border);
+            border-radius: 20px; padding: 18px; margin-bottom: 15px;
+        }
+        .menu-btn { display: flex; align-items: center; cursor: pointer; border-left: 5px solid var(--accent-blue); }
+
+        /* Form & Input */
+        input, textarea {
+            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid var(--border);
+            padding: 12px; color: white; border-radius: 10px; margin-bottom: 10px; outline: none; box-sizing: border-box;
         }
 
-        .pln-logo-main {
-            width: 55px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px rgba(0, 242, 255, 0.4));
+        .btn { 
+            padding: 12px; border-radius: 10px; border: none; cursor: pointer; 
+            font-weight: bold; font-family: 'Orbitron', sans-serif; font-size: 10px;
         }
+        .btn-add { background: var(--accent-green); color: white; width: 100%; margin-bottom: 15px; }
+        .btn-edit { background: var(--accent-blue); color: #000; flex: 1; }
+        .btn-del { background: var(--accent-red); color: white; flex: 1; }
 
-        .brand-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 34px;
-            font-weight: 700;
-            letter-spacing: 5px;
-            margin: 0;
-            background: linear-gradient(180deg, #fff 0%, var(--accent-blue) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.3));
-        }
+        /* Navigation */
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .brand-tagline {
-            font-size: 10px;
-            letter-spacing: 3px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            margin-top: 8px;
-        }
-
-        /* MENU GRID MODERN */
-        .menu-grid {
-            display: grid;
-            gap: 16px;
-            margin-top: 20px;
-        }
-
-        .menu-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 25px;
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .menu-item:hover {
-            transform: translateY(-5px);
-            background: rgba(30, 41, 59, 0.9);
-            border-color: var(--accent-blue);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
-        }
-
-        .menu-item::before {
-            content: '';
-            position: absolute;
-            left: 0; top: 0; width: 4px; height: 100%;
-        }
-
-        .m-announ::before { background: var(--accent-blue); box-shadow: 0 0 15px var(--accent-blue); }
-        .m-sop::before { background: var(--accent-green); box-shadow: 0 0 15px var(--accent-green); }
-        .m-contact::before { background: var(--accent-red); box-shadow: 0 0 15px var(--accent-red); }
-
-        .icon-box {
-            font-size: 24px;
-            margin-right: 20px;
-            background: rgba(255,255,255,0.05);
-            width: 50px; height: 50px;
-            display: flex; align-items: center; justify-content: center;
-            border-radius: 16px;
-        }
-
-        /* NAVIGATION */
-        .page { display: none; animation: pageIn 0.5s ease both; }
-        .page.active { display: block; }
-        @keyframes pageIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .btn-back-nav {
-            background: transparent;
-            color: var(--text-secondary);
-            border: 1px solid var(--glass-border);
-            padding: 10px 15px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 11px;
-            margin-bottom: 25px;
-            display: flex; align-items: center; gap: 8px;
-        }
-
-        /* SEARCH BAR */
-        .search-wrapper {
-            background: rgba(0,0,0,0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 8px 18px;
-            display: flex; align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .search-wrapper input {
-            background: transparent; border: none; color: white;
-            padding: 12px; width: 100%; outline: none; font-size: 15px;
-        }
-
-        /* DATA CARDS */
-        .data-card {
-            background: var(--glass-bg);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 16px;
-            border: 1px solid var(--glass-border);
-        }
-
-        .unit-label {
-            font-size: 10px; font-weight: 800; color: #000;
-            background: var(--accent-blue); padding: 3px 10px;
-            border-radius: 6px; display: inline-block; margin-bottom: 12px;
-            font-family: 'Orbitron', sans-serif;
-        }
-
-        .alarm-name { 
-            color: var(--accent-red); font-size: 20px; margin: 0 0 15px 0; 
-            font-weight: 800; line-height: 1.2;
-        }
-
-        .info-grid { font-size: 13px; line-height: 1.6; color: var(--text-secondary); }
-        .info-grid b { color: var(--text-primary); display: block; margin-top: 10px; }
-
-        .action-highlight {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            border-radius: 15px; padding: 15px; margin-top: 15px;
-            color: var(--accent-green); font-weight: 600;
-        }
-
-        /* CONTACT LIST */
-        .contact-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 18px; background: rgba(255,255,255,0.03);
-            border-radius: 16px; margin-bottom: 10px;
-        }
-
-        .call-btn {
-            background: var(--accent-blue); color: #000;
-            padding: 8px 15px; border-radius: 10px;
-            text-decoration: none; font-weight: 800; font-size: 13px;
-        }
-
+        .unit-badge { font-size: 9px; font-weight: 800; background: var(--accent-blue); color: #000; padding: 3px 8px; border-radius: 4px; margin-bottom: 8px; display: inline-block; font-family: 'Orbitron'; }
+        .alarm-title { color: var(--accent-red); margin: 0 0 10px 0; font-size: 18px; }
+        .search-box { position: sticky; top: 10px; z-index: 100; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-<div class="app-wrapper">
-    
+<div class="container">
     <div id="homePage" class="page active">
-        <div class="branding-section">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Logo_PLN.svg" alt="PLN" class="pln-logo-main">
-            <h1 class="brand-title">PANDU-GI</h1>
-            <div class="brand-tagline">Operator Digital Assistant</div>
+        <div class="header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/2/20/Logo_PLN.svg" class="logo">
+            <h1 class="title">PANDU-GI</h1>
+            <p style="font-size:10px; letter-spacing:2px; color:var(--accent-blue)">DATABASE OPERATOR LENGKAP</p>
         </div>
-
-        <div class="menu-grid">
-            <div class="menu-item m-announ" onclick="openPage('announPage')">
-                <div class="icon-box">📡</div>
-                <div>
-                    <h3 style="margin:0; font-size:18px;">Annunciator</h3>
-                    <div style="font-size:12px; color:var(--text-secondary);">Database & Troubleshooting</div>
-                </div>
-            </div>
-
-            <div class="menu-item m-sop" onclick="openPage('sopPage')">
-                <div class="icon-box">📘</div>
-                <div>
-                    <h3 style="margin:0; font-size:18px;">Panduan SOP</h3>
-                    <div style="font-size:12px; color:var(--text-secondary);">Standard Operation Procedure</div>
-                </div>
-            </div>
-
-            <div class="menu-item m-contact" onclick="openPage('contactPage')">
-                <div class="icon-box">📞</div>
-                <div>
-                    <h3 style="margin:0; font-size:18px;">Kontak Darurat</h3>
-                    <div style="font-size:12px; color:var(--text-secondary);">Emergency Hotlines</div>
-                </div>
-            </div>
+        <div class="card menu-btn" onclick="openPage('announPage')">
+            <div style="font-size:24px; margin-right:15px;">📡</div>
+            <div><b>Annunciator</b><br><small style="color:gray">Manajemen Database Alarm</small></div>
+        </div>
+        <div class="card menu-btn" style="border-left-color: var(--accent-green)" onclick="openPage('sopPage')">
+            <div style="font-size:24px; margin-right:15px;">📋</div>
+            <div><b>Digital SOP</b><br><small style="color:gray">Manajemen Dokumen PDF</small></div>
+        </div>
+        <div class="card menu-btn" style="border-left-color: var(--accent-red)" onclick="openPage('contactPage')">
+            <div style="font-size:24px; margin-right:15px;">📞</div>
+            <div><b>Kontak</b><br><small style="color:gray">Manajemen Nomor Darurat</small></div>
         </div>
     </div>
 
     <div id="announPage" class="page">
-        <button class="btn-back-nav" onclick="openPage('homePage')">← SYSTEM DASHBOARD</button>
-        <div class="search-wrapper">
-            <span>🔍</span>
-            <input type="text" id="searchInput" placeholder="Cari unit atau nama alarm...">
+        <button class="btn" style="background:transparent; color:gray" onclick="openPage('homePage')">← KEMBALI</button>
+        <h2 style="font-family:'Orbitron'; font-size:18px;">DATABASE ALARM</h2>
+        
+        <button class="btn btn-add" onclick="toggleForm('formAnnoun')">+ TAMBAH DATA BARU</button>
+        
+        <div id="formAnnoun" class="card" style="display:none; border-color:var(--accent-green)">
+            <input type="hidden" id="editIdxAnn">
+            <input type="text" id="inUnit" placeholder="Unit (Contoh: TRAFO 1)">
+            <input type="text" id="inAlarm" placeholder="Nama Alarm">
+            <textarea id="inMaksud" placeholder="Maksud Indikasi"></textarea>
+            <textarea id="inSebab" placeholder="Kemungkinan Penyebab"></textarea>
+            <textarea id="inTindakan" placeholder="Tindakan"></textarea>
+            <button class="btn btn-add" onclick="saveAnnoun()">SIMPAN DATA</button>
         </div>
-        <div id="resultsArea"></div>
+
+        <div class="search-box">
+            <input type="text" id="searchAnn" placeholder="Cari unit atau nama alarm..." oninput="renderAnnoun()">
+        </div>
+        <div id="announList"></div>
     </div>
 
     <div id="contactPage" class="page">
-        <button class="btn-back-nav" onclick="openPage('homePage')">← SYSTEM DASHBOARD</button>
-        <h2 style="font-family:'Orbitron'; color:var(--accent-red); letter-spacing:2px;">EMERGENCY CALL</h2>
-        <div id="contactArea"></div>
+        <button class="btn" style="background:transparent; color:gray" onclick="openPage('homePage')">← KEMBALI</button>
+        <h2 style="font-family:'Orbitron'; font-size:18px;">KONTAK DARURAT</h2>
+        <button class="btn btn-add" onclick="toggleForm('formContact')">+ TAMBAH KONTAK</button>
+        <div id="formContact" class="card" style="display:none">
+            <input type="hidden" id="editIdxCon">
+            <input type="text" id="conName" placeholder="Nama Instansi">
+            <input type="text" id="conPhone" placeholder="Nomor Telepon">
+            <button class="btn btn-add" onclick="saveContact()">SIMPAN KONTAK</button>
+        </div>
+        <div id="contactList"></div>
     </div>
 
     <div id="sopPage" class="page">
-        <button class="btn-back-nav" onclick="openPage('homePage')">← SYSTEM DASHBOARD</button>
-        <div class="data-card">
-            <h4 style="margin:0 0 15px 0;">Upload Dokumen PDF</h4>
-            <input type="file" id="sopFile" accept="application/pdf" style="margin-bottom:15px; display:block;">
-            <button onclick="uploadSOP()" style="width:100%; padding:12px; background:var(--accent-green); border:none; border-radius:12px; font-weight:800; cursor:pointer;">STORE TO ARCHIVE</button>
+        <button class="btn" style="background:transparent; color:gray" onclick="openPage('homePage')">← KEMBALI</button>
+        <h2 style="font-family:'Orbitron'; font-size:18px;">DOKUMEN SOP</h2>
+        <div class="card">
+            <input type="text" id="sopName" placeholder="Judul SOP">
+            <input type="file" id="sopFile" accept="application/pdf">
+            <button class="btn btn-add" onclick="saveSOP()">UPLOAD PDF</button>
         </div>
-        <div id="sopListArea" style="margin-top:20px;"></div>
+        <div id="sopList"></div>
     </div>
-
 </div>
 
 <script>
-// --- DATABASE 100% LENGKAP TANPA DIKURANGI ---
-const dbCore = [
+// DATABASE 100% LENGKAP
+const rawDB = [
     // TRAFO 1
     {s:"TRAFO 1", a:"CB Q0 – On Local", m:"Posisi PMT pada posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", a:"DS Q1/Q2 On Local", m:"Posisi PMS Rel Posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
@@ -294,7 +161,7 @@ const dbCore = [
     {s:"TRAFO 3", a:"Bucholz Trip", m:"PMT 150 kV Trip karena Rele Bucholz Bekerja", p:"Adanya gangguan hubung singkat di kumparan Trafo yang mengakibatkan timbul gelembung gas dalam Trafo", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"TRAFO 3", a:"Oil Temperature Trip", m:"PMT 150/20 kV Trip karena ada gangguan Internal Trafo yang terdeteksi Rele Mekanis Trafo hingga Level Trip", p:"Rele mekanis Oil Temp bekerja karena adanya kenaikan suhu trafo akibat beban lebih atau sistem pendingin tidak bekerja sempurna", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"TRAFO 3", a:"Sudden Pressure Trip", m:"PMT 150/20 kV Trip karena ada gangguan Internal Trafo yang terdeteksi Rele Mekanis Trafo hingga Level Trip", p:"Rele mekanis Sudden Pressure bekerja karena adanya kenaikan tekanan gas yang sangat cepat di dalam trafo akibat gangguan hubung singkat internal trafo", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", a:"Jansen Trip", m:"PMT 150 kV Trip karena ada gangguan di OLTC Trafo yang terdeteksi Rele Jansen", p:"Rele mekanis Jansen bekerja karena adanya gangguan di kompartemen OLTC", t:"Periksa, catat, reset indikasi, dan laporkan"},
+    {s:"TRAFO 3", a:"Jansen Trip", m:"PMT 150 kV Trip karena ada gangguan di OLTC Trafo yang terdeteksi Rele Jansen", p:"Rele mekanis Jansen bekerja because adanya gangguan di kompartemen OLTC", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"TRAFO 3", a:"HV/LV Winding Trip", m:"PMT 150/20 kV Trip karena ada gangguan Internal Trafo yang terdeteksi Rele Mekanis Trafo hingga Level Trip", p:"Rele mekanis Winding Temp. bekerja karena adanya kenaikan suhu trafo yang diakibatkan beban lebih atau gangguan internal trafo", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"TRAFO 3", a:"Fire Protection Trip", m:"PMT 150/20 kV Trip karena Rele Fire Protection bekerja", p:"Terdeteksi kebakaran di area Trafo", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"TRAFO 3", a:"Low Oil Level Trip", m:"PMT 150/20 kV Trip karena ada penurunan level oli sampai batas minimal", p:"Terjadi kebocoran oli trafo yang sangat banyak", t:"Periksa, catat, reset indikasi, dan laporkan"},
@@ -337,8 +204,8 @@ const dbCore = [
     {s:"KOPEL", a:"CB Failure", m:"System pengisian pegas tidak siap sehingga PMT tidak bisa trip", p:"Supply tegangan untuk pengisian motor pegas PMT Trip/terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"KOPEL", a:"AC Supply Failure", m:"Supply tegangan 380 AC untuk panel control dan panel rele hilang", p:"MCB untuk supply tegangan AC di Panel Kontrol Trip", t:"Periksa, catat, reset indikasi, naikan MCB, dan laporkan"},
     {s:"KOPEL", a:"DC Supply for OCR and GFR failure", m:"Supply 110 V DC untuk Rele OCR dan Rele GFR Hilang", p:"MCB supply tegangan untuk Rele OCR and Rele GFR", t:"Periksa, catat, reset indikasi, naikan MCB, dan laporkan"},
-    {s:"KOPEL", a:"SF6 stage 1 (alarm)", m:"Ada penurunan tekanan gas SF6 (5.6 BAR) pada step 1", p:"Ada kebocoran di pemipaan dan motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"KOPEL", a:"SF6 stage 2 (trip)", m:"PMT 150 kV Trip karena penurunan Tekanan gas SF6 (5.5 BAR) pada step 2", p:"Ada kebocoran di pemipaan dan pengisian motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
+    {s:"KOPEL", a:"SF6 stage 1 (alarm)", m:"Ada penurunan tekanan gas SF6 (5.6 BAR) pada step 1", p:"Ada kebocoran di pemipaan and motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
+    {s:"KOPEL", a:"SF6 stage 2 (trip)", m:"PMT 150 kV Trip karena penurunan Tekanan gas SF6 (5.5 BAR) pada step 2", p:"Ada kebocoran di pemipaan and pengisian motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
 
     // CIKARANG 1
     {s:"CIKARANG 1", a:"C/S/G DC SUPPLIES FAILURE", m:"Terjadi trip di MCB DC di Panel ACDB Switch L/R", p:"Tegangan supply panel Rele dan Kontrol hilang", t:"Periksa MCB di Panel ACDB, jika Trip naikan kembali"},
@@ -348,8 +215,8 @@ const dbCore = [
     {s:"CIKARANG 1", a:"F21 Received DTT", m:"PMT Trip karena Rele Distance menerima perintah dari GI Lawan", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"},
     {s:"CIKARANG 1", a:"F21 Send DTT", m:"PMT Trip karena perintah Rele Distance, Rele Mengirim Trip ke GI Lawan", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"},
     {s:"CIKARANG 1", a:"MK Local Position", m:"Posisi Switch L/R pada MK Posisi Lokal", p:"Peralatan Tidak Bisa di operasikan secara remote baik dari Panel Maupun dari UP2B", t:"Periksa L/R pada Switch di MK, Posisikan Remote Kembali"},
-    {s:"CIKARANG 1", a:"SF6 Gas Presure Low Alarm", m:"Ada penurunan tekanan gas SF6 pada step 1", p:"Ada kebocoran di pemipaan dan motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"CIKARANG 1", a:"SF6 Gas Presure Low Trip", m:"PMT 150 kV Trip karena penurunan Tekanan gas SF6 pada step 2", p:"Ada kebocoran di pemipaan dan pengisian motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
+    {s:"CIKARANG 1", a:"SF6 Gas Presure Low Alarm", m:"Ada penurunan tekanan gas SF6 pada step 1", p:"Ada kebocoran di pemipaan and motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
+    {s:"CIKARANG 1", a:"SF6 Gas Presure Low Trip", m:"PMT 150 kV Trip karena penurunan Tekanan gas SF6 pada step 2", p:"Ada kebocoran di pemipaan and pengisian motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"CIKARANG 1", a:"Trip Circuit Failure", m:"Rangkaian Trip pada PMT Bermasalah", p:"PMT 150kV Tidak Bisa Close", t:"Periksa Rangkaian, catat, dan laporkan"},
     {s:"CIKARANG 1", a:"Pole Discrepancy Operated", m:"Ketidaksamaan posisi pole pada PMT", p:"PMT 150kV Trip", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"CIKARANG 1", a:"Main Protection 1 Trip", m:"PMT Trip karena Rele Proteksi Utama 1 bekerja", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, reset indikasi, dan laporkan"},
@@ -374,8 +241,8 @@ const dbCore = [
     {s:"CIKARANG 2", a:"F21 Received DTT", m:"PMT Trip karena Rele Distance menerima perintah dari GI Lawan", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"},
     {s:"CIKARANG 2", a:"F21 Send DTT", m:"PMT Trip karena Rele Distance, Rele Mengirim perintah Trip ke GI Lawan", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"},
     {s:"CIKARANG 2", a:"MK Local Position", m:"Posisi Switch L/R pada MK Posisi Lokal", p:"Peralatan Tidak Bisa di operasikan secara remote baik dari Panel Maupun dari UP2B", t:"Periksa L/R pada Switch di MK, Posisikan Remote Kembali"},
-    {s:"CIKARANG 2", a:"SF6 Gas Presure Low Alarm", m:"Ada penurunan tekanan gas SF6 pada step 1", p:"Ada kebocoran di pemipaan dan motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"CIKARANG 2", a:"SF6 Gas Presure Low Trip", m:"PMT 150 kV Trip karena penurunan Tekanan gas SF6 pada step 2", p:"Ada kebocoran di pemipaan dan pengisian motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
+    {s:"CIKARANG 2", a:"SF6 Gas Presure Low Alarm", m:"Ada penurunan tekanan gas SF6 pada step 1", p:"Ada kebocoran di pemipaan and motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
+    {s:"CIKARANG 2", a:"SF6 Gas Presure Low Trip", m:"PMT 150 kV Trip karena penurunan Tekanan gas SF6 pada step 2", p:"Ada kebocoran di pemipaan and pengisian motor kompresor terganggu", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"CIKARANG 2", a:"Trip Circuit Failure", m:"Rangkaian Trip pada PMT Bermasalah", p:"PMT 150kV Tidak Bisa Close", t:"Periksa Rangkaian, catat, dan laporkan"},
     {s:"CIKARANG 2", a:"Pole Discrepancy Operated", m:"Ketidaksamaan posisi pole pada PMT", p:"PMT 150kV Trip", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"CIKARANG 2", a:"Main Protection 1 Trip", m:"PMT Trip karena Rele Proteksi Utama 1 bekerja", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, reset indikasi, dan laporkan"},
@@ -393,105 +260,149 @@ const dbCore = [
     {s:"CIKARANG 2", a:"F87L Operated", m:"PMT Trip karena Rele Differential Line bekerja", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"}
 ];
 
-// DATA KONTAK
-const contactDB = [
-    {name: "Piket UP2B", phone: "0217456789", desc: "Dispatcher Utama"},
-    {name: "Piket GI", phone: "081234567890", desc: "Operator Standby"},
-    {name: "Damkar", phone: "113", desc: "Emergency Kebakaran"}
-];
+let announData = JSON.parse(localStorage.getItem('announ_full_v4')) || rawDB;
+let contactData = JSON.parse(localStorage.getItem('contact_full_v4')) || [{name:"Piket UP2B", phone:"021-7456789"}];
+let sopData = JSON.parse(localStorage.getItem('sop_full_v4')) || [];
 
-// --- APP LOGIC ---
 function openPage(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById(id).classList.add('active');
-    if(id === 'announPage') renderAnnoun(dbCore);
-    if(id === 'contactPage') renderContacts();
+    renderAnnoun(); renderContact(); renderSOP();
     window.scrollTo(0,0);
 }
 
-function renderAnnoun(data) {
-    const area = document.getElementById('resultsArea');
-    area.innerHTML = '';
-    data.forEach(item => {
-        const card = document.createElement('div');
-        card.className = 'data-card';
-        card.innerHTML = `
-            <div class="unit-label">${item.s}</div>
-            <h3 class="alarm-name">${item.a}</h3>
-            <div class="info-grid">
-                <b>MAKSUD INDIKASI:</b> ${item.m}
-                <b>KEMUNGKINAN PENYEBAB:</b> ${item.p}
-            </div>
-            <div class="action-highlight">
-                🛡️ TINDAKAN: ${item.t}
-            </div>
-        `;
-        area.appendChild(card);
+function toggleForm(id) {
+    const f = document.getElementById(id);
+    f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+
+// --- ANNUNCIATOR CORE ---
+function saveAnnoun() {
+    const idx = document.getElementById('editIdxAnn').value;
+    const newItem = {
+        s: document.getElementById('inUnit').value,
+        a: document.getElementById('inAlarm').value,
+        m: document.getElementById('inMaksud').value,
+        p: document.getElementById('inSebab').value,
+        t: document.getElementById('inTindakan').value
+    };
+
+    if(idx === "") announData.unshift(newItem);
+    else announData[idx] = newItem;
+
+    localStorage.setItem('announ_full_v4', JSON.stringify(announData));
+    document.getElementById('editIdxAnn').value = "";
+    document.querySelectorAll('#formAnnoun input, #formAnnoun textarea').forEach(i => i.value = "");
+    toggleForm('formAnnoun');
+    renderAnnoun();
+}
+
+function renderAnnoun() {
+    const list = document.getElementById('announList');
+    const q = document.getElementById('searchAnn').value.toLowerCase();
+    list.innerHTML = '';
+    announData.forEach((d, i) => {
+        if(d.a.toLowerCase().includes(q) || d.s.toLowerCase().includes(q)) {
+            list.innerHTML += `
+                <div class="card">
+                    <span class="unit-badge">${d.s}</span>
+                    <h3 class="alarm-title">${d.a}</h3>
+                    <div style="font-size:12px; line-height:1.5; color:#cbd5e1">
+                        <b>MAKSUD:</b> ${d.m}<br><br>
+                        <b>PENYEBAB:</b> ${d.p}<br>
+                        <div style="margin-top:10px; color:var(--accent-green); border-top:1px solid #334155; padding-top:10px;">
+                            <b>🛡️ TINDAKAN:</b> ${d.t}
+                        </div>
+                    </div>
+                    <div style="margin-top:15px; display:flex; gap:10px;">
+                        <button class="btn btn-edit" onclick="editAnnoun(${i})">EDIT</button>
+                        <button class="btn btn-del" onclick="delAnnoun(${i})">HAPUS</button>
+                    </div>
+                </div>`;
+        }
     });
 }
 
-function renderContacts() {
-    const area = document.getElementById('contactArea');
-    area.innerHTML = '';
-    contactDB.forEach(c => {
-        area.innerHTML += `
-            <div class="contact-row">
-                <div>
-                    <div style="font-weight:800;">${c.name}</div>
-                    <div style="font-size:11px; color:var(--text-secondary);">${c.desc}</div>
+function editAnnoun(i) {
+    const d = announData[i];
+    document.getElementById('inUnit').value = d.s;
+    document.getElementById('inAlarm').value = d.a;
+    document.getElementById('inMaksud').value = d.m;
+    document.getElementById('inSebab').value = d.p;
+    document.getElementById('inTindakan').value = d.t;
+    document.getElementById('editIdxAnn').value = i;
+    if(document.getElementById('formAnnoun').style.display === 'none') toggleForm('formAnnoun');
+    window.scrollTo(0,0);
+}
+
+function delAnnoun(i) {
+    if(confirm('Hapus data ini?')) {
+        announData.splice(i, 1);
+        localStorage.setItem('announ_full_v4', JSON.stringify(announData));
+        renderAnnoun();
+    }
+}
+
+// --- CONTACT & SOP ---
+function saveContact() {
+    const idx = document.getElementById('editIdxCon').value;
+    const newItem = { name: document.getElementById('conName').value, phone: document.getElementById('conPhone').value };
+    if(idx === "") contactData.push(newItem); else contactData[idx] = newItem;
+    localStorage.setItem('contact_full_v4', JSON.stringify(contactData));
+    document.getElementById('editIdxCon').value = "";
+    toggleForm('formContact'); renderContact();
+}
+
+function renderContact() {
+    const list = document.getElementById('contactList');
+    list.innerHTML = '';
+    contactData.forEach((c, i) => {
+        list.innerHTML += `
+            <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+                <div><b>${c.name}</b><br><span style="color:var(--accent-blue)">${c.phone}</span></div>
+                <div style="display:flex; gap:5px;">
+                    <button class="btn btn-edit" style="padding:5px 10px;" onclick="editCon(${i})">✏️</button>
+                    <button class="btn btn-del" style="padding:5px 10px;" onclick="delCon(${i})">🗑️</button>
                 </div>
-                <a href="tel:${c.phone}" class="call-btn">CALL NOW</a>
-            </div>
-        `;
+            </div>`;
     });
 }
 
-// SEARCH ENGINE
-document.getElementById('searchInput').addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase();
-    if(!query) return renderAnnoun(dbCore);
-    
-    const results = dbCore.filter(item => 
-        item.a.toLowerCase().includes(query) || 
-        item.s.toLowerCase().includes(query) ||
-        item.m.toLowerCase().includes(query)
-    );
-    renderAnnoun(results);
-});
+function editCon(i) {
+    document.getElementById('conName').value = contactData[i].name;
+    document.getElementById('conPhone').value = contactData[i].phone;
+    document.getElementById('editIdxCon').value = i;
+    toggleForm('formContact');
+}
 
-// PDF STORAGE (LocalStorage)
-function uploadSOP() {
+function delCon(i) { contactData.splice(i,1); localStorage.setItem('contact_full_v4', JSON.stringify(contactData)); renderContact(); }
+
+function saveSOP() {
     const fileInput = document.getElementById('sopFile');
     if(fileInput.files[0]) {
         const reader = new FileReader();
         reader.onload = (e) => {
-            const sops = JSON.parse(localStorage.getItem('gi_sops') || '[]');
-            sops.push({ name: fileInput.files[0].name, content: e.target.result });
-            localStorage.setItem('gi_sops', JSON.stringify(sops));
-            renderSOPList();
+            sopData.push({ name: document.getElementById('sopName').value || fileInput.files[0].name, content: e.target.result });
+            localStorage.setItem('sop_full_v4', JSON.stringify(sopData));
+            renderSOP();
         };
         reader.readAsDataURL(fileInput.files[0]);
     }
 }
 
-function renderSOPList() {
-    const area = document.getElementById('sopListArea');
-    const sops = JSON.parse(localStorage.getItem('gi_sops') || '[]');
-    area.innerHTML = sops.map((s, idx) => `
-        <div class="contact-row">
-            <span style="font-size:12px; width:70%;">${s.name}</span>
-            <button onclick="viewPDF(${idx})" class="call-btn" style="background:var(--accent-green);">OPEN</button>
-        </div>
-    `).join('');
+function renderSOP() {
+    const list = document.getElementById('sopList');
+    list.innerHTML = sopData.map((s, i) => `
+        <div class="card" style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:12px;">${s.name}</span>
+            <div style="display:flex; gap:5px;">
+                <button class="btn btn-edit" style="padding:5px 10px;" onclick="window.open().document.write('<iframe src=\\'${s.content}\\' width=\\'100%\\' height=\\'100%\\'></iframe>')">VIEW</button>
+                <button class="btn btn-del" style="padding:5px 10px;" onclick="sopData.splice(${i},1); localStorage.setItem('sop_full_v4', JSON.stringify(sopData)); renderSOP();">🗑️</button>
+            </div>
+        </div>`).join('');
 }
 
-function viewPDF(idx) {
-    const sops = JSON.parse(localStorage.getItem('gi_sops') || '[]');
-    const win = window.open();
-    win.document.write(`<iframe src="${sops[idx].content}" frameborder="0" style="width:100%; height:100vh;"></iframe>`);
-}
-
-window.onload = () => { renderSOPList(); };
+window.onload = () => { renderAnnoun(); renderContact(); renderSOP(); };
 </script>
 </body>
 </html>
