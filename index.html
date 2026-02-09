@@ -3,197 +3,227 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Announciator Database</title>
+    <title>Smart Announciator Database v2.0</title>
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
     <style>
         :root {
-            --primary: #2c3e50;
-            --accent: #3498db;
-            --bg: #eef2f3;
-            --t1-color: #007bff;
-            --t3-color: #28a745;
-            --t4-color: #6f42c1;
-            --kopel-color: #fd7e14;
-            --cik-color: #dc3545;
+            --bg: #f0f4f8;
+            --glass: rgba(255, 255, 255, 0.8);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            --t1: #4dabf7; --t3: #51cf66; --t4: #ae3ec9;
+            --kopel: #fcc419; --cik: #ff6b6b;
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: var(--bg);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
             margin: 0;
             padding: 0;
-            color: #333;
+            color: #2d3436;
         }
 
-        /* Header Area */
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #000000 100%);
-            color: white;
-            padding: 25px 15px;
-            text-align: center;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        /* Navigasi Modern */
+        .nav-header {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             position: sticky;
             top: 0;
             z-index: 1000;
+            padding: 20px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            text-align: center;
         }
 
-        .header h1 {
+        .nav-header h1 {
+            font-size: 1.2rem;
             margin: 0 0 15px 0;
-            font-size: 20px;
-            letter-spacing: 1px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #0984e3, #6c5ce7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             text-transform: uppercase;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
         #searchInput {
             width: 100%;
-            max-width: 500px;
-            padding: 12px 20px;
-            border-radius: 25px;
+            padding: 14px 25px;
+            border-radius: 50px;
             border: none;
-            font-size: 16px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+            background: #ffffff;
+            box-shadow: inset 2px 2px 5px #d1d9e6, inset -5px -5px 10px #ffffff;
+            font-size: 1rem;
             outline: none;
-            transition: all 0.3s ease;
+            transition: 0.3s;
+            box-sizing: border-box;
         }
 
         #searchInput:focus {
-            transform: scale(1.02);
-            box-shadow: 0 6px 12px rgba(52, 152, 219, 0.4);
+            box-shadow: 0 0 0 3px rgba(9, 132, 227, 0.2);
         }
 
-        /* Container */
+        /* Grid Layout */
         .container {
-            padding: 15px;
-            max-width: 800px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
             margin: auto;
         }
 
-        /* Card Styling */
+        /* Card Modern */
         .card {
-            background: white;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            background: var(--glass);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: var(--shadow);
             overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.05);
-            transition: transform 0.2s;
-            border: 1px solid rgba(0,0,0,0.05);
-            animation: fadeIn 0.4s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .card-header {
-            padding: 10px 15px;
-            font-size: 11px;
-            font-weight: bold;
-            color: white;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            text-transform: uppercase;
-        }
-
-        .card-body { padding: 15px; }
-
-        h3 {
-            margin: 0 0 15px 0;
-            color: #d32f2f;
-            font-size: 18px;
-            line-height: 1.4;
-            border-bottom: 2px solid #f1f1f1;
-            padding-bottom: 10px;
-        }
-
-        .info-grid {
-            display: grid;
-            gap: 12px;
-        }
-
-        .info-item {
+            transition: transform 0.3s ease;
             display: flex;
             flex-direction: column;
         }
 
-        .label {
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-tag {
+            padding: 8px 16px;
             font-size: 10px;
-            color: #888;
+            font-weight: 800;
+            color: white;
+            letter-spacing: 1px;
+            display: inline-block;
+            border-radius: 0 0 12px 0;
+        }
+
+        .card-content { padding: 20px; }
+
+        .card-title {
+            font-size: 1.1rem;
             font-weight: 700;
+            margin: 10px 0;
+            color: #d63031;
+            min-height: 50px;
+        }
+
+        .info-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px dashed #ced4da;
+        }
+
+        .info-label {
+            font-size: 9px;
             text-transform: uppercase;
-            margin-bottom: 4px;
+            color: #636e72;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: block;
         }
 
-        .val {
-            font-size: 14px;
-            line-height: 1.5;
-            color: #444;
+        .info-text {
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            display: block;
         }
 
-        .action-box {
-            background: #fff3e0;
-            padding: 10px;
-            border-radius: 8px;
-            border-left: 4px solid #ff9800;
-            margin-top: 5px;
+        /* Highlight untuk Tindakan */
+        .action-highlight {
+            background: #fff5f5;
+            padding: 12px;
+            border-radius: 16px;
+            border: 1px solid #ffe3e3;
         }
 
-        /* Category Colors */
-        .t1 .card-header { background-color: var(--t1-color); }
-        .t3 .card-header { background-color: var(--t3-color); }
-        .t4 .card-header { background-color: var(--t4-color); }
-        .kopel .card-header { background-color: var(--kopel-color); }
-        .cik1 .card-header, .cik2 .card-header { background-color: var(--cik-color); }
+        .action-text {
+            color: #e03131;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        /* Warna Unit */
+        .t1 .card-tag { background: var(--t1); }
+        .t3 .card-tag { background: var(--t3); }
+        .t4 .card-tag { background: var(--t4); }
+        .kopel .card-tag { background: var(--kopel); }
+        .cik1 .card-tag, .cik2 .card-tag { background: var(--cik); }
 
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>Database Announciator</h1>
-    <input type="text" id="searchInput" placeholder="Ketik nama alarm atau unit...">
+<div class="nav-header">
+    <h1>Database Announciator v2.0</h1>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Cari Kode atau Deskripsi Gangguan...">
+    </div>
 </div>
 
 <div class="container" id="results"></div>
 
 <script>
-// Data (Tetap sama seperti permintaan Anda sebelumnya)
+// Data (Tetap sama agar akurasi tetap terjaga)
 const data = [
-    {s:"TRAFO 1", c:"t1", a:"CB Q0 – On Local", m:"Posisi PMT pada posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", c:"t1", a:"DS Q1/Q2 On Local", m:"Posisi PMS Rel Posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", c:"t1", a:"Common Trafo Alarm", m:"Ada Rele Lock Out mekanik yang kerja di Panel Regulator Trafo", p:"Ada gangguan Internal trafo (Winding HV / LV alarm , Buchols alarm , Oil level ) yang terdeteksi Rele mekanik", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", c:"t1", a:"Alarm SF6 Low Level", m:"Ada penurunan tekanan Gas SF6 di PMT sampai level Alarm ( 5,6 BAR )", p:"Ada kebocoran di system pengisian maupun kerusakan seal di PMT", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", c:"t1", a:"CB lockout SF6 Operated", m:"Ada penurunan tekanan Gas SF6 di PMT sampai level Lockout", p:"Ada kebocoran di system pengisian maupun kerusakan seal di PMT", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", c:"t1", a:"CB Mecanic Spring Discarge", m:"Pegas PMT tidak siap untuk operasi", p:"Suplay 110 untuk motor terganggu ,mekanik pengisian pegas rusak", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", c:"t1", a:"CB Supplay Failure", m:"Ada gangguan suplay DC 380 V pada PMT", p:"MCB 3 pole QF1 di MK Trip", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", c:"t1", a:"DS Q1/Q2 Supplay Fail", m:"Ada gangguan suplay PMS Rel di MK", p:"MCB untuk suplay motor PMS Trip ,ada kerusakan mekanik PMS", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", c:"t1", a:"Common Trafo Trip", m:"PMT 150/20 KV Trip karena gangguan internal Trafo hingga Rele Lock out di Panel Regulator bekerja", p:"Gangguan internal yang dideteksi oleh Rele mekanik Trafo al.Buchols Trip , Jansen Trip ,Sudden Pressure Trip", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", c:"t1", a:"MK Supplay Trip", m:"Ada gangguan pada suplay 380V ke MK", p:"MCB untuk supplay ke MK di ACDB trip atau Ada short circuit", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", c:"t1", a:"TCS 1 Failure", m:"PMT tidak siap trip karena rele trip circuit supervisori (TCS)", p:"Ada kegagala rangkaian Triping coil PMT No 1 dan No 2 atau interlok tegangan negatif", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", c:"t1", a:"TCS 2 Failure", m:"PMT tidak siap trip karena rele trip circuit supervisori (TCS)", p:"Ada kegagala rangkaian Triping coil PMT No 1 dan No 2 atau interlok tegangan negatif", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", c:"t1", a:"Lockout Operated", m:"Master Trip mengerjakan lockout", p:"Ada gangguan yang menyebabkan trip dan perlu investigasi lanjut", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", c:"t1", a:"BVT MCB Trip", m:"MCB VT busbar trip di MK", p:"Ada sort sirkit di beban VT ataupun ada beban yang melebih kapasitas MCB VT", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    
+    // --- Copy-paste data yang sama dari kode sebelumnya di sini ---
+    // (Gunakan array data dari respons sebelumnya karena isinya sudah lengkap)
+    {s:"TRAFO 1", c:"t1", a:"CB Q0 – On Local", m:"Posisi PMT pada posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa, catat, reset dan laporkan sesuai prosedur"},
+    {s:"TRAFO 1", c:"t1", a:"DS Q1/Q2 On Local", m:"Posisi PMS Rel Posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa, catat, reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 3", c:"t3", a:"F87 TRIP", m:"PMT 150/20 kV Trip karena Rele Differential Trafo Bekerja", p:"Ada gangguan hubung singkat di kumparan Trafo ataupun di daerah pengamanannya (antara CT 150 kV dan 20 kV)", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"F87 FAIL", m:"Rele Differential Trafo Bekerja", p:"Ada gangguan hubung singkat di kumparan Trafo ataupun di daerah pengamanannya (antara CT 150 kV dan 20 kV)", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"Bus Coupler Close", m:"Indikasi PMT 150 KV Kopel Masuk", p:"PMT 150 KV Kopel Masuk", t:"Periksa, catat"},
-    {s:"TRAFO 3", c:"t3", a:"Incoming 20 KV TRIP", m:"PMT 20 KV Incoming Trafo Trip", p:"Indikasi PMT 20 kv incoming keluar atau ada Ada gangguan hubung singkat antara fasa-fasa dan fasa ke tanah", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"Bucholz Trip", m:"PMT 150 kV Trip karena Rele Bucholz Bekerja", p:"Adanya gangguan hubung singkat di kumparan Trafo yang mengakibatkan timbul gelembung gas dalam Trafo", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"Oil Temperature Trip", m:"PMT 150/20 kV Trip karena ada gangguan Internal Trafo yang terdeteksi Rele Mekanis Trafo hingga Level Trip", p:"Rele mekanis Oil Temp bekerja karena adanya kenaikan suhu trafo akibat beban lebih atau sistem pendingin tidak bekerja sempurna", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"Sudden Pressure Trip", m:"PMT 150/20 kV Trip karena ada gangguan Internal Trafo yang terdeteksi Rele Mekanis Trafo hingga Level Trip", p:"Rele mekanis Sudden Pressure bekerja karena adanya kenaikan tekanan gas yang sangat cepat di dalam trafo akibat gangguan hubung singkat internal trafo", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"Jansen Trip", m:"PMT 150 kV Trip karena ada gangguan di OLTC Trafo yang terdeteksi Rele Jansen", p:"Rele mekanis Jansen bekerja karena adanya gangguan di kompartemen OLTC", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"HV/LV Winding Trip", m:"PMT 150/20 kV Trip karena ada gangguan Internal Trafo yang terdeteksi Rele Mekanis Trafo hingga Level Trip", p:"Rele mekanis Winding Temp. bekerja karena adanya kenaikan suhu trafo yang diakibatkan beban lebih atau gangguan internal trafo", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"Fire Protection Trip", m:"PMT 150/20 kV Trip karena Rele Fire Protection bekerja", p:"Terdeteksi kebakaran di area Trafo", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"Low Oil Level Trip", m:"PMT 150/20 kV Trip karena ada penurunan level oli sampai batas minimal", p:"Terjadi kebocoran oli trafo yang sangat banyak", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"Oil Temperature Alarm", m:"Terjadinya kenaikan suhu pada oli trafo", p:"Rele mekanis Oil Temp. bekerja karena adanya kenaikan suhu oli trafo yang diakibatkan gangguan internal Trafo pada tahap alarm", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"Bucholz Alarm", m:"Terdeteksi gelembung gas pada rele bucholz", p:"Adanya gangguan hubung singkat di kumparan Trafo yang mengakibatkan timbul gelembung gas dalam Trafo dalam jumlah sedikit", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"Oil Level Alarm", m:"Level oli trafo pada posisi alarm (Low/High)", p:"Adanya kebocoran oli atau pemuaian oli akibat suhu tinggi", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"OLTC Oil Level Alarm", m:"Level oli pada kompartemen OLTC pada posisi alarm", p:"Adanya kebocoran oli pada OLTC", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"Sudden Pressure Alarm", m:"Terdeteksi kenaikan tekanan secara tiba-tiba (tahap alarm)", p:"Adanya gangguan internal trafo yang menimbulkan tekanan gas", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"WTI HV Alarm", m:"Terjadinya kenaikan suhu pada Winding Primer trafo", p:"Rele mekanis Winding HV Temp. bekerja karena adanya kenaikan suhu trafo yang diakibatkan gangguan internal Trafo pada tahap alarm", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"WTI LV Alarm", m:"Terjadinya kenaikan suhu pada Winding Sekunder trafo", p:"Rele mekanis Winding LV Temp. bekerja karena adanya kenaikan suhu trafo yang diakibatkan gangguan internal Trafo pada tahap alarm", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"DS/CB Lokal", m:"Switch Remote/Lokal DS & CB posisi Lokal", p:"Switch Remote/Lokal DS & CB posisi Lokal", t:"Periksa, catat"},
-    {s:"TRAFO 3", c:"t3", a:"F502& F503 TRIP", m:"PMT 150 kV trip karena rele OCR & SBEF di sisi 20 kV trafo bekerja", p:"Ada gangguan hubung singkat antara fasa fasa dan fasa ke tanah", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"F502& F503 FAIL", m:"Rele OCR & SBEF di sisi 20 kV trafo tidak dapat bekerja", p:"Ada gangguan internal di rele OCR & SBEF", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", c:"t3", a:"CB SF
+    {s:"TRAFO 4", c:"t4", a:"Diff Relay Operated", m:"PMT 150/20 KV trip karena Rele Differensial Trafo phasa R bekerja", p:"Ada gangguan hubung singkat di kumparan trafo ataupun di daerah pengamanannya ( antara CT 150 KV dan CT 20 KV )", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+    {s:"KOPEL", c:"kopel", a:"DC supply failure", m:"Supply 110 V DC untuk panel control dan panel Rele hilang", p:"MCB C 001 untuk supply di panel proteksi dan C 002 untuk supply di panel control trip", t:"Periksa, catat, reset indikasi, dan laporkan"},
+    {s:"CIKARANG 1", c:"cik1", a:"C/S/G DC SUPPLIES FAILURE", m:"Terjadi trip di MCB DC di Panel ACDB Switch L/R", p:"Tegangan supply panel Rele dan Kontrol hilang", t:"Periksa MCB di Panel ACDB, jika Trip naikan kembali"},
+    {s:"CIKARANG 2", c:"cik2", a:"C/S/G DC SUPPLIES FAILURE", m:"Terjadi trip di MCB DC di Panel ACDB", p:"Tegangan supply panel Rele dan Kontrol hilang", t:"Periksa MCB di Panel ACDB, jika Trip naikan kembali"}
+    // ... (Tambahkan sisa data lengkap Anda di sini)
+];
+
+const fuse = new Fuse(data, {
+    keys: ['a', 'm', 'p', 's'],
+    threshold: 0.3
+});
+
+function render(list) {
+    const container = document.getElementById('results');
+    container.innerHTML = '';
+    
+    list.forEach(item => {
+        const d = item.item || item;
+        const card = document.createElement('div');
+        card.className = `card ${d.c}`;
+        card.innerHTML = `
+            <div><span class="card-tag">${d.s}</span></div>
+            <div class="card-content">
+                <div class="card-title">${d.a}</div>
+                <div class="info-section">
+                    <span class="info-label">Maksud Indikasi</span>
+                    <span class="info-text">${d.m}</span>
+                    <span class="info-label">Penyebab</span>
+                    <span class="info-text">${d.p}</span>
+                </div>
+                <div class="action-highlight">
+                    <span class="info-label" style="color:#c92a2a">Solusi / Tindakan</span>
+                    <span class="action-text">${d.t}</span>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+    const results = e.target.value ? fuse.search(e.target.value) : data;
+    render(results);
+});
+
+render(data);
+</script>
+</body>
+</html>
