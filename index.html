@@ -3,151 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANDU-GI | OPERASIONAL</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <title>PANDU-GI MOBILE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
+            --primary: #0284c7;
+            --danger: #e11d48;
+            --success: #16a34a;
+            --warning: #f59e0b;
+            --dark: #0f172a;
             --bg: #f1f5f9;
-            --white: #ffffff;
-            --primary: #0369a1;
-            --danger: #be123c;
-            --success: #15803d;
-            --warning: #b45309;
-            --text: #0f172a;
-            --border: #cbd5e1;
         }
 
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding-bottom: 20px; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--dark); margin: 0; padding-bottom: 80px; }
         
-        /* Navigation 4 Menu */
-        .nav-bar { 
-            display: flex; background: var(--white); position: sticky; top: 0; z-index: 1000; 
-            border-bottom: 3px solid var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        /* Bottom Navigation */
+        .bottom-nav { 
+            position: fixed; bottom: 0; left: 0; right: 0; height: 65px; 
+            background: #ffffff; display: flex; justify-content: space-around; 
+            align-items: center; border-top: 2px solid var(--primary); z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
         }
-        .nav-btn { 
-            flex: 1; padding: 15px 2px; border: none; background: none; font-weight: 800; 
-            font-size: 9px; color: #64748b; cursor: pointer; text-transform: uppercase; 
+        .nav-item { 
+            background: none; border: none; color: #64748b; font-size: 10px; 
+            font-weight: 800; text-transform: uppercase; cursor: pointer;
             display: flex; flex-direction: column; align-items: center; gap: 4px;
         }
-        .nav-btn.active { color: var(--primary); background: #f0f9ff; }
-        .nav-btn.active i { border-bottom: 2px solid var(--primary); }
+        .nav-item.active { color: var(--primary); }
+        .nav-item span { font-size: 20px; }
 
-        .container { max-width: 500px; margin: 0 auto; padding: 15px; }
+        .container { padding: 15px; max-width: 600px; margin: 0 auto; }
         .content-section { display: none; }
-        .content-section.active { display: block; }
+        .content-section.active { display: block; animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        /* Card Styles */
-        .card { background: var(--white); border-radius: 12px; padding: 16px; margin-bottom: 12px; border: 1px solid var(--border); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
-        .alarm-title { color: var(--danger); font-size: 16px; margin: 8px 0; font-weight: 800; border-left: 4px solid var(--danger); padding-left: 10px; }
-        .info-box { font-size: 13px; line-height: 1.5; color: #334155; }
-        .info-box b { color: var(--text); display: block; margin-top: 8px; font-size: 11px; text-transform: uppercase; color: var(--primary); }
+        /* Card System */
+        .card { background: #fff; border-radius: 12px; padding: 15px; margin-bottom: 12px; border: 1px solid #e2e8f0; position: relative; }
+        .unit-tag { background: #e0f2fe; color: var(--primary); padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 800; }
+        .alarm-title { color: var(--danger); font-size: 16px; font-weight: 800; margin: 10px 0; display: block; }
+        .desc-box { font-size: 13px; line-height: 1.5; color: #475569; }
+        .desc-box b { display: block; color: var(--dark); margin-top: 8px; font-size: 10px; }
 
-        /* Buttons & Inputs */
-        .btn { padding: 12px; border-radius: 8px; border: none; cursor: pointer; font-weight: 700; font-size: 13px; width: 100%; transition: 0.2s; }
-        .search-input { width: 100%; padding: 14px; border-radius: 10px; border: 2px solid var(--primary); margin-bottom: 15px; box-sizing: border-box; font-size: 16px; outline: none; }
+        /* Action Buttons */
+        .action-row { display: flex; gap: 8px; margin-top: 15px; border-top: 1px dashed #e2e8f0; padding-top: 10px; }
+        .btn-sm { flex: 1; padding: 8px; border-radius: 6px; border: none; font-weight: 700; font-size: 11px; cursor: pointer; }
+        .btn-edit { background: #fef3c7; color: #92400e; }
+        .btn-del { background: #fee2e2; color: #991b1b; }
 
-        #editor { display: none; background: #fffbeb; border: 2px solid var(--warning); padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid var(--border); border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+        /* Search & Form */
+        .search-bar { width: 100%; padding: 15px; border-radius: 12px; border: 2px solid var(--primary); margin-bottom: 15px; box-sizing: border-box; font-size: 16px; outline: none; }
+        #editor { display: none; background: white; padding: 20px; border-radius: 15px; border: 2px solid var(--warning); margin-bottom: 20px; }
+        input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #cbd5e1; border-radius: 8px; box-sizing: border-box; font-family: inherit; }
 
-        .btn-call { background: var(--success); color: white; text-decoration: none; padding: 10px; border-radius: 8px; text-align: center; font-weight: bold; display: block; margin-top: 10px; }
+        /* Sub-Menu Data */
+        .sub-menu-card { background: var(--dark); color: white; padding: 20px; border-radius: 15px; margin-bottom: 10px; }
+        .btn-main { background: var(--primary); color: white; padding: 12px; width: 100%; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; margin-bottom: 10px; }
+        
+        .btn-call { background: var(--success); color: white; text-decoration: none; padding: 12px; border-radius: 8px; display: block; text-align: center; font-weight: 800; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-    <nav class="nav-bar">
-        <button class="nav-btn active" onclick="showTab('annunciator')">📢<br>Annunciator</button>
-        <button class="nav-btn" onclick="showTab('sop')">📋<br>SOP</button>
-        <button class="nav-btn" onclick="showTab('kontak')">📞<br>Kontak</button>
-        <button class="nav-btn" onclick="showTab('data')">⚙️<br>Data</button>
-    </nav>
-
     <div class="container">
-        
         <section id="annunciator" class="content-section active">
-            <button class="btn" style="background:var(--primary); color:white; margin-bottom:15px;" onclick="openAdd()">+ INPUT ALARM BARU</button>
+            <h2 style="font-weight: 800;">📢 ANNUNCIATOR</h2>
+            <button class="btn-main" onclick="openAdd()">+ TAMBAH ALARM BARU</button>
             
             <div id="editor">
-                <h3 id="formTitle" style="margin-top:0; font-size:14px; color:var(--warning)">PENGATURAN DATA ALARM</h3>
+                <h3 style="margin-top:0; color:var(--warning)">FORM EDITOR</h3>
                 <input type="hidden" id="editIdx">
-                <input type="text" id="inUnit" placeholder="Unit/Bay (Contoh: TRAFO 1)">
-                <input type="text" id="inAlarm" placeholder="Nama Alarm/Indikasi">
+                <input type="text" id="inUnit" placeholder="Bay/Unit (Contoh: TRAFO 1)">
+                <input type="text" id="inAlarm" placeholder="Nama Alarm">
                 <textarea id="inMaksud" placeholder="Maksud Indikasi" rows="3"></textarea>
                 <textarea id="inSebab" placeholder="Kemungkinan Penyebab" rows="3"></textarea>
                 <textarea id="inTindakan" placeholder="Tindakan Operator" rows="3"></textarea>
-                <button class="btn" onclick="saveData()" style="background:var(--success); color:white;">SIMPAN KE DATABASE</button>
-                <button class="btn" onclick="closeEditor()" style="background:#94a3b8; color:white; margin-top:5px;">BATAL</button>
+                <button class="btn-main" onclick="saveData()" style="background:var(--success)">SIMPAN DATA</button>
+                <button class="btn-main" onclick="closeEditor()" style="background:#64748b">BATAL</button>
             </div>
 
-            <input type="text" id="q" class="search-input" placeholder="Cari Kode Unit atau Nama Alarm..." oninput="render()">
+            <input type="text" id="q" class="search-bar" placeholder="Cari Unit atau Alarm..." oninput="render()">
             <div id="list"></div>
         </section>
 
         <section id="sop" class="content-section">
-            <div class="card" style="border-top: 5px solid var(--primary)">
-                <h3>Langkah Penanganan Gangguan</h3>
-                <ol style="font-size:14px; padding-left:18px; line-height:1.6;">
-                    <li>Identifikasi Alarm pada Panel Annunciator.</li>
-                    <li>Catat Indikasi Rele yang bekerja di Panel Proteksi.</li>
-                    <li>Laporkan kondisi peralatan ke Dispatcher UP2B.</li>
-                    <li>Lakukan investigasi lapangan berdasarkan database PANDU-GI.</li>
-                    <li>Eksekusi instruksi Dispatcher (Reset/Manuver).</li>
-                </ol>
+            <h2 style="font-weight: 800;">📋 SOP OPERASIONAL</h2>
+            <div class="card" style="border-left: 5px solid var(--primary)">
+                <h3>GANGGUAN SISTEM</h3>
+                <p style="font-size:14px">1. Amati Annunciator & Rele<br>2. Lapor Dispatcher<br>3. Analisa PANDU-GI<br>4. Reset & Pemulihan</p>
             </div>
-            <div class="card" style="border-top: 5px solid var(--success)">
-                <h3>Standar K3 Operasional</h3>
-                <ul style="font-size:14px; padding-left:18px; line-height:1.6;">
-                    <li>Wajib menggunakan Helm & Sepatu Safety di area Switchyard.</li>
-                    <li>Gunakan sarung tangan isolasi saat melakukan pengoperasian manual DS.</li>
-                    <li>Dilarang bekerja sendiri saat kondisi darurat/hujan petir.</li>
-                </ul>
+            <div class="card" style="border-left: 5px solid var(--danger)">
+                <h3>KESELAMATAN (K3)</h3>
+                <p style="font-size:14px">Wajib Helm, Sepatu Safety, dan Sarung Tangan Tahan Tegangan saat manuver manual.</p>
             </div>
         </section>
 
         <section id="kontak" class="content-section">
-            <h3 style="font-size:14px; color:var(--primary)">OPERASIONAL UTAMA</h3>
+            <h2 style="font-weight: 800;">📞 KONTAK DARURAT</h2>
             <div class="card">
-                <b>Dispatcher UP2B (Piket)</b><br>
-                <small>Koordinasi Manuver & Tegangan</small>
-                <a href="tel:021XXXXX" class="btn-call">HUBUNGI DISPATCHER</a>
+                <b>DISPATCHER UP2B</b>
+                <a href="tel:123" class="btn-call">HUBUNGI SEKARANG</a>
             </div>
             <div class="card">
-                <b>Regu Pemeliharaan (ULTG)</b><br>
-                <small>Investigasi Kerusakan Peralatan</small>
-                <a href="tel:081XXXXX" class="btn-call">HUBUNGI TIM HAR</a>
-            </div>
-            
-            <h3 style="font-size:14px; color:var(--danger); margin-top:20px;">EMERGENCY / DARURAT</h3>
-            <div class="card" style="border: 2px solid var(--danger)">
-                <b>Pemadam Kebakaran (DAMKAR)</b>
-                <a href="tel:113" class="btn-call" style="background:var(--danger)">PANGGIL PEMADAM</a>
+                <b>PEMADAM KEBAKARAN</b>
+                <a href="tel:113" class="btn-call" style="background:var(--danger)">PANGGIL DAMKAR</a>
             </div>
             <div class="card">
-                <b>Keamanan / Security GI</b>
-                <a href="tel:123" class="btn-call" style="background:#475569">HUBUNGI SECURITY</a>
+                <b>TEAM MAINTENANCE</b>
+                <a href="tel:0812" class="btn-call" style="background:var(--warning)">HUBUNGI ULTG</a>
             </div>
         </section>
 
         <section id="data" class="content-section">
-            <div class="card">
-                <h3>Manajemen Database</h3>
-                <p style="font-size:12px; color:#64748b; margin-bottom:15px;">Gunakan menu ini untuk mengamankan data yang telah Anda edit atau tambahkan.</p>
-                
-                <button class="btn" style="background:#334155; color:white; margin-bottom:10px;" onclick="exportDB()">📥 DOWNLOAD BACKUP (.JSON)</button>
-                
-                <p style="font-size:12px; color:#64748b; margin-bottom:5px;">Restore data dari file cadangan:</p>
-                <button class="btn" style="background:#e2e8f0; color:var(--text); border:1px solid var(--border);" onclick="document.getElementById('fIn').click()">📤 RESTORE DATABASE</button>
-                <input type="file" id="fIn" style="display:none" onchange="importDB(event)">
+            <h2 style="font-weight: 800;">⚙️ MANAJEMEN DATA</h2>
+            <div class="sub-menu-card">
+                <h3>Sub-Menu: Cadangan</h3>
+                <p style="font-size:12px; opacity:0.8">Ekspor semua data ke file .JSON untuk disimpan di HP.</p>
+                <button class="btn-main" onclick="exportDB()" style="background:#fff; color:var(--dark)">📥 DOWNLOAD BACKUP</button>
             </div>
-            
-            <div class="card" style="background:#fef2f2; border: 1px solid #fee2e2;">
-                <h4 style="color:var(--danger); margin-top:0;">Peringatan</h4>
-                <p style="font-size:11px; color:#b91c1c;">Menghapus cache browser secara total dapat menghilangkan data lokal. Pastikan Anda rutin melakukan <b>Download Backup</b>.</p>
+            <div class="sub-menu-card" style="background:#fff; color:var(--dark); border:1px solid #e2e8f0">
+                <h3>Sub-Menu: Pemulihan</h3>
+                <p style="font-size:12px; color:#64748b">Unggah file backup untuk mengembalikan data.</p>
+                <button class="btn-main" onclick="document.getElementById('fIn').click()">📤 RESTORE DATA</button>
+                <input type="file" id="fIn" style="display:none" onchange="importDB(event)">
             </div>
         </section>
     </div>
 
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="showTab('annunciator')"><span>📢</span>Annunciator</button>
+        <button class="nav-item" onclick="showTab('sop')"><span>📋</span>SOP</button>
+        <button class="nav-item" onclick="showTab('kontak')"><span>📞</span>Kontak</button>
+        <button class="nav-item" onclick="showTab('data')"><span>⚙️</span>Data</button>
+    </nav>
+
 <script>
-// DATABASE 100% LENGKAP - SESUAI DATA ASLI
+// DATABASE ASLI 100%
 const masterData = [
     {s:"TRAFO 1", a:"CB Q0 – On Local", m:"Posisi PMT pada posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", a:"DS Q1/Q2 On Local", m:"Posisi PMS Rel Posisi Local", p:"Switch R/S pada posisi remote atau local", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
@@ -159,8 +149,8 @@ const masterData = [
     {s:"TRAFO 1", a:"DS Q1/Q2 Supplay Fail", m:"Ada gangguan suplay PMS Rel di MK", p:"MCB untuk suplay motor PMS Trip ,ada kerusakan mekanik PMS", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", a:"Common Trafo Trip", m:"PMT 150/20 KV Trip karena gangguan internal Trafo hingga Rele Lock out di Panel Regulator bekerja", p:"Gangguan internal yang dideteksi oleh Rele mekanik Trafo al.Buchols Trip , Jansen Trip ,Sudden Pressure Trip", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", a:"MK Supplay Trip", m:"Ada gangguan pada suplay 380V ke MK", p:"MCB untuk supplay ke MK di ACDB trip atau Ada short circuit", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", a:"TCS 1 Failure", m:"PMT tidak siap trip because rele trip circuit supervisori (TCS)", p:"Ada kegagala rangkaian Triping coil PMT No 1 dan No 2 atau interlok tegangan negatif", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 1", a:"TCS 2 Failure", m:"PMT tidak siap trip because rele trip circuit supervisori (TCS)", p:"Ada kegagala rangkaian Triping coil PMT No 1 dan No 2 atau interlok tegangan negatif", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+    {s:"TRAFO 1", a:"TCS 1 Failure", m:"PMT tidak siap trip karena rele trip circuit supervisori (TCS)", p:"Ada kegagala rangkaian Triping coil PMT No 1 dan No 2 atau interlok tegangan negatif", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+    {s:"TRAFO 1", a:"TCS 2 Failure", m:"PMT tidak siap trip karena rele trip circuit supervisori (TCS)", p:"Ada kegagala rangkaian Triping coil PMT No 1 dan No 2 atau interlok tegangan negatif", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", a:"Lockout Operated", m:"Master Trip mengerjakan lockout", p:"Ada gangguan yang menyebabkan trip dan perlu investigasi lanjut", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 1", a:"BVT MCB Trip", m:"MCB VT busbar trip di MK", p:"Ada sort sirkit di beban VT ataupun ada beban yang melebih kapasitas MCB VT", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 3", a:"F87 TRIP", m:"PMT 150/20 kV Trip karena Rele Differential Trafo Bekerja", p:"Ada gangguan hubung singkat di kumparan Trafo ataupun di daerah pengamanannya (antara CT 150 kV dan 20 kV)", t:"Periksa, catat, reset indikasi, dan laporkan"},
@@ -170,7 +160,7 @@ const masterData = [
     {s:"TRAFO 3", a:"Bucholz Trip", m:"PMT 150 kV Trip karena Rele Bucholz Bekerja", p:"Adanya gangguan hubung singkat di kumparan Trafo yang mengakibatkan timbul gelembung gas dalam Trafo", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"TRAFO 3", a:"Oil Temperature Trip", m:"PMT 150/20 kV Trip karena ada gangguan Internal Trafo yang terdeteksi Rele Mekanis Trafo hingga Level Trip", p:"Rele mekanis Oil Temp bekerja karena adanya kenaikan suhu trafo akibat beban lebih atau sistem pendingin tidak bekerja sempurna", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"TRAFO 3", a:"Sudden Pressure Trip", m:"PMT 150/20 kV Trip karena ada gangguan Internal Trafo yang terdeteksi Rele Mekanis Trafo hingga Level Trip", p:"Rele mekanis Sudden Pressure bekerja karena adanya kenaikan tekanan gas yang sangat cepat di dalam trafo akibat gangguan hubung singkat internal trafo", t:"Periksa, catat, reset indikasi, dan laporkan"},
-    {s:"TRAFO 3", a:"Jansen Trip", m:"PMT 150 kV Trip karena ada gangguan di OLTC Trafo yang terdeteksi Rele Jansen", p:"Rele mekanis Jansen bekerja because adanya gangguan di kompartemen OLTC", t:"Periksa, catat, reset indikasi, dan laporkan"},
+    {s:"TRAFO 3", a:"Jansen Trip", m:"PMT 150 kV Trip karena ada gangguan di OLTC Trafo yang terdeteksi Rele Jansen", p:"Rele mekanis Jansen bekerja karena adanya gangguan di kompartemen OLTC", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"TRAFO 3", a:"HV/LV Winding Trip", m:"PMT 150/20 kV Trip karena ada gangguan Internal Trafo yang terdeteksi Rele Mekanis Trafo hingga Level Trip", p:"Rele mekanis Winding Temp. bekerja karena adanya kenaikan suhu trafo yang diakibatkan beban lebih atau gangguan internal trafo", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"TRAFO 3", a:"Fire Protection Trip", m:"PMT 150/20 kV Trip karena Rele Fire Protection bekerja", p:"Terdeteksi kebakaran di area Trafo", t:"Periksa, catat, reset indikasi, dan laporkan"},
     {s:"TRAFO 3", a:"Low Oil Level Trip", m:"PMT 150/20 kV Trip karena ada penurunan level oli sampai batas minimal", p:"Terjadi kebocoran oli trafo yang sangat banyak", t:"Periksa, catat, reset indikasi, dan laporkan"},
@@ -197,7 +187,7 @@ const masterData = [
     {s:"TRAFO 4", a:"Buchholtz Alarm", m:"Relay mekanik (bucholtz) bekerja sampai level alarm", p:"Ada gangguan Internal trafo (Winding HV / LV alarm , Buchols alarm , Oil level ) yang terdeteksi Rele mekanik", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 4", a:"Junction OLTC", m:"PMT 150KV Trip karena rele (jansen) mekanik trafo bekerja", p:"Gangguan internal yang dideteksi oleh Rele mekanik Trafo al.Buchols Trip , Jansen Trip ,Sudden Pressure Trip", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 4", a:"Winding TEMP Alarm", m:"Relay mekanik (temperature) bekerja sampai level alarm", p:"Ada gangguan Internal trafo (Winding HV / LV alarm , Buchols alarm , Oil level ) yang terdeteksi Rele mekanik", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
-    {s:"TRAFO 4", a:"SF6 Min/Block Presure", m:"PMT 150 KV block Trip pada saat gas SF6 mencapai level trip", p:"PMT tidak bisa trip because setting trip di blok", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
+    {s:"TRAFO 4", a:"SF6 Min/Block Presure", m:"PMT 150 KV block Trip pada saat gas SF6 mencapai level trip", p:"PMT tidak bisa trip karena setting trip di blok", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 4", a:"Fire Protection Operated", m:"Pengaman Kebakaran untuk trafo bekerja", p:"Ada peningkatan panas di internal trafo disertai bekerjanya semua relai pengaman utama trafo", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"TRAFO 4", a:"20 KV TRIP", m:"PMT Incoming 20 KV Trip", p:"Ada gangguan di 20 KV yang menyebbkan PMT Inc. Trip termasuk karena penyulang gagal Trip", t:"Periksa ,catat ,reset dan laporkan sesuai prosedur"},
     {s:"KOPEL", a:"DC supply failure", m:"Supply 110 V DC untuk panel control dan panel Rele hilang", p:"MCB C 001 untuk supply di panel proteksi and C 002 untuk supply di panel control trip", t:"Periksa, catat, reset indikasi, dan laporkan"},
@@ -261,11 +251,11 @@ const masterData = [
     {s:"CIKARANG 2", a:"F87L Operated", m:"PMT Trip karena Rele Differential Line bekerja", p:"Ada gangguan pada system 150 kV", t:"Periksa, catat, dan laporkan"}
 ];
 
-let db = JSON.parse(localStorage.getItem('PANDU_MASTER_V2')) || masterData;
+let db = JSON.parse(localStorage.getItem('PANDU_FINAL_DB')) || masterData;
 
 function showTab(id) {
     document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
     document.getElementById(id).classList.add('active');
     event.currentTarget.classList.add('active');
 }
@@ -278,16 +268,16 @@ function render() {
         if(item.s.toLowerCase().includes(q) || item.a.toLowerCase().includes(q)) {
             list.innerHTML += `
             <div class="card">
-                <span style="background:#e0f2fe; color:var(--primary); padding:3px 8px; border-radius:4px; font-size:10px; font-weight:800;">${item.s}</span>
-                <div class="alarm-title">${item.a}</div>
-                <div class="info-box">
-                    <b>Maksud Indikasi:</b> ${item.m}
-                    <b>Kemungkinan Penyebab:</b> ${item.p}
-                    <b>🛡️ Tindakan Operator:</b> ${item.t}
+                <span class="unit-tag">${item.s}</span>
+                <span class="alarm-title">${item.a}</span>
+                <div class="desc-box">
+                    <b>MAKSUD:</b> ${item.m}
+                    <b>PENYEBAB:</b> ${item.p}
+                    <b>🛡️ TINDAKAN:</b> ${item.t}
                 </div>
-                <div style="display:flex; gap:10px; margin-top:15px; border-top:1px dashed #eee; padding-top:10px;">
-                    <button class="btn" style="background:#fef3c7; color:#92400e; flex:1;" onclick="openEdit(${i})">EDIT</button>
-                    <button class="btn" style="background:#fee2e2; color:#991b1b; flex:1;" onclick="del(${i})">HAPUS</button>
+                <div class="action-row">
+                    <button class="btn-sm btn-edit" onclick="openEdit(${i})">✏️ EDIT</button>
+                    <button class="btn-sm btn-del" onclick="del(${i})">🗑️ HAPUS</button>
                 </div>
             </div>`;
         }
@@ -298,12 +288,12 @@ function openAdd() { document.getElementById('editor').style.display='block'; do
 function openEdit(i) {
     const item = db[i];
     document.getElementById('editor').style.display='block';
-    document.getElementById('editIdx').value=i;
-    document.getElementById('inUnit').value=item.s;
-    document.getElementById('inAlarm').value=item.a;
-    document.getElementById('inMaksud').value=item.m;
-    document.getElementById('inSebab').value=item.p;
-    document.getElementById('inTindakan').value=item.t;
+    document.getElementById('editIdx').value = i;
+    document.getElementById('inUnit').value = item.s;
+    document.getElementById('inAlarm').value = item.a;
+    document.getElementById('inMaksud').value = item.m;
+    document.getElementById('inSebab').value = item.p;
+    document.getElementById('inTindakan').value = item.t;
     window.scrollTo(0,0);
 }
 
@@ -315,24 +305,24 @@ function saveData() {
         t: document.getElementById('inTindakan').value
     };
     if(i==='') db.unshift(data); else db[i]=data;
-    localStorage.setItem('PANDU_MASTER_V2', JSON.stringify(db));
+    localStorage.setItem('PANDU_FINAL_DB', JSON.stringify(db));
     closeEditor(); render();
 }
 
 function closeEditor() { document.getElementById('editor').style.display='none'; }
-function del(i) { if(confirm("Hapus data ini secara permanen?")) { db.splice(i,1); localStorage.setItem('PANDU_MASTER_V2', JSON.stringify(db)); render(); } }
+function del(i) { if(confirm("Hapus data permanen?")) { db.splice(i,1); localStorage.setItem('PANDU_FINAL_DB', JSON.stringify(db)); render(); } }
 
 function exportDB() {
     const blob = new Blob([JSON.stringify(db)], {type:'application/json'});
-    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='PANDU_GI_BACKUP.json'; a.click();
+    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='BACKUP_PANDU_GI.json'; a.click();
 }
 
 function importDB(e) {
     const r = new FileReader();
     r.onload = function(f) {
         db = JSON.parse(f.target.result);
-        localStorage.setItem('PANDU_MASTER_V2', JSON.stringify(db));
-        render(); alert("Database Berhasil dipulihkan!");
+        localStorage.setItem('PANDU_FINAL_DB', JSON.stringify(db));
+        render(); alert("Database dipulihkan!");
     };
     r.readAsText(e.target.files[0]);
 }
